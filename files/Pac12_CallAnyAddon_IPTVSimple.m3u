@@ -1,0 +1,123 @@
+#EXTM3U PVR IPTV SIMPLE CLIENT
+
+#EXTINF:-1 group-title="UNOIPTV" tvg-logo="http://ims.v247tv.com/upload/images/channels/logoes/quehuong1.png",[COLOR cyan]Quê Hương TV (UNOIPTV-103)[/COLOR]
+http://127.0.0.1:5000/play.m3u8?url=uno-DUnEMQ52bb04ayU908vwu5U30oydMmrs
+
+#EXTINF:-1 group-title="UNOIPTV" tvg-logo="http://ims.v247tv.com/upload/images/channels/logoes/bolero.png",[COLOR cyan]Bolero (UNOIPTV-112)[/COLOR] 
+http://127.0.0.1:5000/play.m3u8?url=uno-DUnEMQ52bb04ayU908vwu2N2SIB4yGcw
+
+#EXTINF:-1 group-title="UNOIPTV" tvg-logo="http://ims.v247tv.com/upload/images/channels/logoes/cosmotv.png",[COLOR cyan]CosmoTV (UNOIPTV-101)[/COLOR]
+http://127.0.0.1:5000/play.m3u8?url=uno-DUnEMQ52bb04ayU908vwu1sOng5kMYdU
+
+#EXTINF:-1 group-title="UNOIPTV" tvg-logo="http://ims.v247tv.com/upload/images/channels/logoes/catholic.png",[COLOR cyan]CTV (UNOIPTV-94)[/COLOR]
+http://127.0.0.1:5000/play.m3u8?url=uno-DUnEMQ52bb3AG5HUO5c%2Fwtav6MBYPXaY
+
+#EXTINF:-1 group-title="UNOIPTV" tvg-logo="http://ims.v247tv.com/upload/images/channels/logoes/Film24h.jpg",[COLOR cyan]Film 24h (UNOIPTV-107)[/COLOR]
+http://127.0.0.1:5000/play.m3u8?url=uno-DUnEMQ52bb04ayU908vwu0f9C4l86Hqm
+
+#EXTINF:-1 group-title="UNOIPTV" tvg-logo="http://ims.v247tv.com/upload/images/channels/logoes/VIETV_SAN_JOSE.jpg",[COLOR cyan]VIETV San Jose (UNOIPTV-141)[/COLOR]
+http://127.0.0.1:5000/play.m3u8?url=uno-DUnEMQ52bb04ayU908vwuzeHeiLSRpP%2B
+
+#EXTINF:-1 group-title="UNOIPTV" tvg-logo="http://ims.v247tv.com/upload/images/channels/logoes/Vlife_1.jpg",[COLOR cyan]VLife (UNOIPTV-108)[/COLOR]
+http://127.0.0.1:5000/play.m3u8?url=uno-DUnEMQ52bb04ayU908vwu7UBHqOmukag
+
+#EXTINF:-1 group-title="UNOIPTV" tvg-logo="http://ims.v247tv.com/upload/images/channels/logoes/Vnews.jpg",[COLOR cyan]Vnews (UNOIPTV-100)[/COLOR]
+http://127.0.0.1:5000/play.m3u8?url=uno-DUnEMQ52bb04ayU908vwu9uTovzKkHwc
+
+#EXTINF:-1 group-title="UNOIPTV" tvg-logo="http://ims.v247tv.com/upload/images/channels/logoes/vietglobal.png",[COLOR cyan]VGM TV (UNOIPTV-109)[/COLOR]
+http://127.0.0.1:5000/play.m3u8?url=uno-DUnEMQ52bb04ayU908vwu%2BrLZM7aT1Un
+
+#EXTINF:-1 group-title="UNOIPTV" tvg-logo="http://ims.v247tv.com/upload/images/channels/logoes/phatgiao.png",[COLOR cyan]Phật Giáo (UNOIPTV-92)[/COLOR]
+http://127.0.0.1:5000/play.m3u8?url=uno-DUnEMQ52bb3AG5HUO5c%2FwtZn4HigOpU7
+
+#EXTINF:-1 group-title="UNOIPTV" tvg-logo="http://ims.v247tv.com/upload/images/channels/logoes/VANTV2.png",[COLOR cyan]VANTV (UNOIPTV-102)[/COLOR]
+http://127.0.0.1:5000/play.m3u8?url=uno-DUnEMQ52bb04ayU908vwu1omi7Bv0Hsp
+
+#EXTINF:-1 group-title="UNOIPTV" tvg-logo="http://ims.v247tv.com/upload/images/channels/logoes/VIETV_LOS_ANGELES.jpg",[COLOR cyan]VIETV Los Angeles (UNOIPTV-131)[/COLOR]
+http://127.0.0.1:5000/play.m3u8?url=uno-DUnEMQ52bb04ayU908vwu6TfO0D%2FS8QI
+    
+#EXTINF:-1 group-title="UNOIPTV" tvg-logo="http://ims.v247tv.com/upload/images/channels/logoes/VIETV_HOUSTON.jpg",[COLOR cyan]VIETV Houston (UNOIPTV-125)[/COLOR]
+http://127.0.0.1:5000/play.m3u8?url=uno-DUnEMQ52bb04ayU908vwu77li16%2B5lMH
+
+#EXTINF:-1 group-title="UNOIPTV" tvg-logo="http://ims.v247tv.com/upload/images/channels/logoes/VIETV_CANADA.jpg",[COLOR cyan]VIETV Canada (UNOIPTV-111)[/COLOR]
+http://127.0.0.1:5000/play.m3u8?url=uno-DUnEMQ52bb04ayU908vwu6o6WzI7QWZY
+#EXTINF:-1 group-title="VIETTV24" tvg-logo="http://www.viettv24.com/main/images/rangdong_logo.jpg",[COLOR yellow]101 - Rạng Đông TV (VietTV24 - VNOP)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/plugin://plugin.video.thongld.vnplaylist/play/http%3A%2F%2Fcdn1.galaxyott.com%2Fapi%2Fa3b34c0871dc2fd51eec5559b68f709d%3Fchn%3D%2Fsecure%2Fstreamer%2Frangdong%2Fplaylist.m3u8%26u%3Dguest/101+-+Rạng+Đông+TV+(Hải+ngoại)?
+
+#EXTINF:-1 group-title="VIETTV24" tvg-logo="https://i.ytimg.com/vi/BZ8HRmzuF9I/hqdefault.jpg",[COLOR yellow]102 - iSaiGon (VietTV24 - VNOP)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/plugin://plugin.video.thongld.vnplaylist/play/http%3A%2F%2Fcdn1.galaxyott.com%2Fapi%2Fa3b34c0871dc2fd51eec5559b68f709d%3Fchn%3D%2Fsecure%2Fstreamer%2Fvatv%2Fplaylist.m3u8%26u%3Dguest/102+-+iSaiGon+(Hải+ngoại)?
+
+#EXTINF:-1 group-title="VIETTV24" tvg-logo="http://www.viettv24.com/main/images/Hai%2024-7.jpg",[COLOR yellow]103 - Hài 24-7 (VietTV24 - VNOP)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/plugin://plugin.video.thongld.vnplaylist/play/http%3A%2F%2Fcdn1.galaxyott.com%2Fapi%2Fa3b34c0871dc2fd51eec5559b68f709d%3Fchn%3D%2Fsecure%2Fstreamer%2Fhai%2Fplaylist.m3u8%26u%3Dguest/103+-+Hài+24-7+(Hải+ngoại)?
+
+#EXTINF:-1 group-title="VIETTV24" tvg-logo="http://www.viettv24.com/main/images/VpopTV_logo.jpg",[COLOR yellow]104 - VPopTV (VietTV24 - VNOP)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/plugin://plugin.video.thongld.vnplaylist/play/http%3A%2F%2Fcdn1.galaxyott.com%2Fapi%2Fa3b34c0871dc2fd51eec5559b68f709d%3Fchn%3D%2Fsecure%2Fstreamer%2Fvpoptv%2Fplaylist.m3u8%26u%3Dguest/104+-+VPopTV+(Hải+ngoại)?
+
+#EXTINF:-1 group-title="VIETTV24" tvg-logo="http://www.viettv24.com/main/images/VNATV_Logo.jpg",[COLOR yellow]105 - VNATV 57.3 (VietTV24 - VNOP)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/plugin://plugin.video.thongld.vnplaylist/play/http%3A%2F%2Fcdn1.galaxyott.com%2Fapi%2Fa3b34c0871dc2fd51eec5559b68f709d%3Fchn%3D%2Fsecure%2Fstreamer%2Fvnatv%2Fplaylist.m3u8%26u%3Dguest/105+-+VNATV+57.3+(Hải+ngoại)?
+
+#EXTINF:-1 group-title="VIETTV24" tvg-logo="http://www.viettv24.com/main/images/Hai_Le_Logo.jpg",[COLOR yellow]106 - Hải Lê Television (VietTV24 - VNOP)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/plugin://plugin.video.thongld.vnplaylist/play/http%3A%2F%2Fcdn1.galaxyott.com%2Fapi%2Fa3b34c0871dc2fd51eec5559b68f709d%3Fchn%3D%2Fsecure%2Fstreamer%2Fttt%2Fplaylist.m3u8%26u%3Dguest/106+-+Hải+Lê+Television+(Hải+ngoại)?
+
+#EXTINF:-1 group-title="VIETTV24" tvg-logo="http://www.viettv24.com/main/images/VBolero-Logo.jpg",[COLOR yellow]108 - VBolero TV (VietTV24 - VNOP)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/plugin://plugin.video.thongld.vnplaylist/play/http%3A%2F%2Fcdn1.galaxyott.com%2Fapi%2Fa3b34c0871dc2fd51eec5559b68f709d%3Fchn%3D%2Fsecure%2Fstreamer%2Fvbolero%2Fplaylist.m3u8%26u%3Dguest/108+-+VBolero+TV+(Hải+ngoại)?
+
+#EXTINF:-1 group-title="VIETTV24" tvg-logo="http://www.viettv24.com/main/images/Vmusic_logo.jpg",[COLOR yellow]115 - VMusic (VietTV24 - VNOP)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/plugin://plugin.video.thongld.vnplaylist/play/http%3A%2F%2Fcdn1.galaxyott.com%2Fapi%2Fa3b34c0871dc2fd51eec5559b68f709d%3Fchn%3D%2Fsecure%2Fstreamer%2Fmtv%2Fplaylist.m3u8%26u%3Dguest/115+-+VMusic+(Hải+ngoại)?
+
+#EXTINF:-1 group-title="VIETTV24" tvg-logo="http://www.viettv24.com/main/images/VietMediaTV_logo.jpg",[COLOR yellow]116 - Việt Media TV (VietTV24 - VNOP)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/plugin://plugin.video.thongld.vnplaylist/play/http%3A%2F%2Fcdn1.galaxyott.com%2Fapi%2Fa3b34c0871dc2fd51eec5559b68f709d%3Fchn%3D%2Fsecure%2Fstreamer%2Fvietmediatv%2Fplaylist.m3u8%26u%3Dguest/116+-+Việt+Media+TV+(Hải+ngoại)?
+
+#EXTINF:-1 group-title="VIETTV24" tvg-logo="http://www.viettv24.com/main/images/Vo_Mon_Thien_Tu.jpg",[COLOR yellow]117 - Vô Môn Thiền Tự (VietTV24 - VNOP)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/plugin://plugin.video.thongld.vnplaylist/play/http%3A%2F%2Fcdn1.galaxyott.com%2Fapi%2Fa3b34c0871dc2fd51eec5559b68f709d%3Fchn%3D%2Fsecure%2Fstreamer%2Fvmtt%2Fplaylist.m3u8%26u%3Dguest/117+-+Vô+Môn+Thiền+Tự+(Hải+ngoại)?
+
+#EXTINF:-1 group-title="VIETTV24" tvg-logo="http://www.viettv24.com/main/images/skcd.jpg",[COLOR yellow]118 - Sân Khấu & Cuộc Đời (VietTV24 - VNOP)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/plugin://plugin.video.thongld.vnplaylist/play/http%3A%2F%2Fcdn1.galaxyott.com%2Fapi%2Fa3b34c0871dc2fd51eec5559b68f709d%3Fchn%3D%2Fsecure%2Fstreamer%2Fcailuong%2Fplaylist.m3u8%26u%3Dguest/118+-+Sân+Khấu+%26+Cuộc+Đời+(Hải+ngoại)?
+
+#EXTINF:-1 group-title="VIETTV24" tvg-logo="http://www.viettv24.com/main/images/ibc.jpg",[COLOR yellow]IBC TV 57.8 (VietTV24 - VNOP)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/plugin://plugin.video.thongld.vnplaylist/play/http%3A%2F%2Fliveplay3.malimarcdn.com%2Fibcnews%2Fibcnews.sdp%2Fplaylist.m3u8/IBC+TV+57.8+(Hải+ngoại)?
+
+#EXTINF:-1 group-title="VIETTV24" tvg-logo="http://www.viettv24.com/main/images/littlesg.jpg",[COLOR yellow]Little Saigon TV 57.7 (VietTV24 - VNOP)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/plugin://plugin.video.thongld.vnplaylist/play/http%3A%2F%2Flocalhost%3A5000%2Fplay.m3u8%3Furl%3Dhttps%3A%2F%2Flivestream.com%2Fapi%2Faccounts%2F21388423%2Fevents%2F7992704/Little+Saigon+TV+57.7+(Hải+ngoại)?
+
+#EXTINF:-1 group-title="VIETTV24" tvg-logo="http://www.viettv24.com/main/images/sgtv_logo.jpg",[COLOR yellow]Sài Gòn TV 57.5 (VietTV24 - VNOP)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/plugin://plugin.video.thongld.vnplaylist/play/https%3A%2F%2Fsaigonrtmp.tulix.tv%2Fvchannel2%2Fvchannel2%2Fplaylist.m3u8/Sài+Gòn+TV+57.5+(Hải+ngoại)?
+
+#EXTINF:-1 group-title="GOOGLEDRIVE" tvg-logo="https://thuynga.com/media/catalog/product/cache/6/image/370x370/9df78eab33525d08d6e5fb8d27136e95/3/7/370x370pbn125.jpg",[COLOR magenta]PBN 125 (GD - VNOP)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/plugin://plugin.video.thongld.vnplaylist/play/https%3A%2F%2Fdrive.google.com%2Ffile%2Fd%2F1hcSpHSNhG29aNz_Esnwm0kwvLXZ3BpQC/GD
+
+#EXTINF:-1 group-title="DAILYMOTION" tvg-logo="https://www.dailymotion.com/thumbnail/video/x6mjs65",[COLOR lime]ASIA 82 - 1/3 (Dailymotion)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/plugin://plugin.video.dailymotion_com/?url=x6mjs65&mode=playVideo
+
+#EXTINF:-1 group-title="DAILYMOTION" tvg-logo="https://www.dailymotion.com/thumbnail/video/x6mjtry",[COLOR lime]ASIA 82 - 2/3 (Dailymotion)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/plugin://plugin.video.dailymotion_com/?url=x6mjtry&mode=playVideo
+
+#EXTINF:-1 group-title="DAILYMOTION" tvg-logo="https://www.dailymotion.com/thumbnail/video/x6mmv9p",[COLOR lime]ASIA 82 - 3/3 (Dailymotion)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/plugin://plugin.video.dailymotion_com/?url=x6mmv9p&mode=playVideo
+
+#EXTINF:-1 group-title="MEDIAFIRE" tvg-logo="https://cdn.shopify.com/s/files/1/1136/6860/products/ASIA_81_DVD_cover.jpg?v=1525372567",[COLOR orange]Asia 81 Disc 1 (Mediafire)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/http://www.mediafire.com/download/vfccgbjyq01w4qq/Asia81_D1.mkv
+
+#EXTINF:-1 group-title="MEDIAFIRE" tvg-logo="https://cdn.shopify.com/s/files/1/1136/6860/products/ASIA_81_DVD_cover.jpg?v=1525372567",[COLOR orange]Asia 81 Disc 2 (Mediafire)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/http://www.mediafire.com/download/8586i57q6fn5i2a/Asia81_D2.mkv
+
+#EXTINF:-1 group-title="YOUTUBE" tvg-logo="https://i.ytimg.com/vi/dqbybmXmQRM/hqdefault.jpg",[COLOR lightgreen] Lệ Quyên 2017 (Youtube)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/plugin://plugin.video.youtube/play/?video_id=dqbybmXmQRM
+
+#EXTINF:-1 group-title="YOUTUBE" tvg-logo="https://i.ytimg.com/vi/qYWpt-UKDfs/hqdefault.jpg",[COLOR lightgreen] Tổng Hợp Giọng Hát Bolero (Youtube)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/plugin://plugin.video.youtube/play/?video_id=qYWpt-UKDfs
+
+#EXTINF:-1 group-title="YOUTUBE" tvg-logo="https://i.ytimg.com/vi/DAtvswlCU9E/hqdefault.jpg",[COLOR lightgreen] Phim Đặc Nhiệm Quyến Rũ (Youtube)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/plugin://plugin.video.youtube/play/?video_id=DAtvswlCU9E&list=PL7iNlLnIWpA9Q4lz-3FTo1h3N70xR1xkO
+
+#EXTINF:-1 group-title="FSHARE" tvg-logo="https://thuynga.com/media/catalog/product/resized/170x170/40e6ee7f89bd278ae7590deb9fa5b859/370x370pbn124.jpg",[COLOR lightblue]PBN 124 (Fshare - Xshare)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/plugin://plugin.video.xshare/?mode=3&page=0&url=https://www.fshare.vn/file/7WQMPEKDW4MG
+
+#EXTINF:-1 group-title="FSHARE" tvg-logo="https://i.ytimg.com/vi/5FSjWzQwm-0/hqdefault.jpg",[COLOR lightblue]Táo Quân 2018 (Fshare - VMF)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/plugin://plugin.video.vietmediaF?action=play_direct_link_play&url=https://www.fshare.vn/file/5IS8F6BROUYX
+
+#EXTINF:-1 group-title="XOMGIAITRI" tvg-logo="http://img.mythugian.net/images/film/PHONG%20MA%20K%E1%BB%B6%202018",[COLOR blue]Phong Ma Kỷ 2018 (XomGiaiTri)[/COLOR]
+http://127.0.0.1:19098/vodstreamers/plugin://plugin.video.kodi4vn.xomgiaitri/?url=http%3A%2F%2Fwww.xomvnonline.com%2Fwatch%2F573101%2FTap-1-End.html&mode=loadvideo&name=Part+-+1-End&mirrorname=VIP+OK+%3A+
+
+
+
