@@ -458,7 +458,7 @@ def adult():
 				addDir(name, url, mode, thumb, True)
 	except:
 		pass
-	addDir('[COLOR yellow][B]Miami TV[/B][/COLOR]', 'miami', 99, ico('miamitv'), True)
+	#addDir('[COLOR yellow][B]Miami TV[/B][/COLOR]', 'miami', 99, ico('miamitv'), True)
 
 def adult_addons():
 	get_m3u(adultaddons)
