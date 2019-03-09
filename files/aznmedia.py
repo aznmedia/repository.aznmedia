@@ -439,7 +439,7 @@ def install_repos(headTitle):
 		pass
 	if os.path.isfile(repoGroup) == True:
 		os.remove(repoGroup)
-	elif os.path.isfile(repoDataGroup) == True:
+	if os.path.isfile(repoDataGroup) == True:
 		os.remove(repoDataGroup)
 
 def tutorial_links(url):
