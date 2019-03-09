@@ -376,24 +376,71 @@ def update_repo():
 	xbmc.executebuiltin('XBMC.Container.Refresh')
 	xbmc.executebuiltin('XBMC.Container.Update')
 
-def install_repos(headTitle, ReposLoc):
+def install_repos(headTitle):
 	try:
-		RepoZip = os.path.basename(ReposLoc)
-		repoGroup = os.path.join(packagesLoc, RepoZip)
-		dp = xbmcgui.DialogProgress()
-		dp.create(headTitle, 'Downloading big zip file... Please wait...', '[COLOR magenta]Đang tải zip file dung lượng lớn... Vui lòng chờ...[/COLOR]')
-		#shutil.copy(ReposLoc, repoGroup)
-		urllib.urlretrieve(ReposLoc, repoGroup)
-		time.sleep(1)
-		dp.update(0, 'Extracting zip files... Please wait...', '[COLOR magenta]Đang giải nén zip files... Vui lòng chờ...[/COLOR]')
-		addonfolder = xbmc.translatePath('special://home')
-		extract_all(repoGroup, addonfolder, dp)
-		time.sleep(1)
-		update_repo()
+		for root, dirs, files in os.walk(packagesLoc):
+			file_count = 0
+			file_count += len(files)
+			if file_count > 0:
+				for f in files:
+					os.unlink(os.path.join(root, f))
+				for d in dirs:
+					shutil.rmtree(os.path.join(root, d))
+	except:
+		pass
+	try:
+		if KodiVersion > 17:
+			#ReposLoc = os.path.expanduser(r'~\Desktop\allinoneadult18.zip')
+			ReposLoc = mainloc + 'allinoneadult18.zip'
+			RepoZip = os.path.basename(ReposLoc)
+			repoGroup = os.path.join(packagesLoc, RepoZip)
+			#ReposDataLoc = os.path.expanduser(r'~\Desktop\allinoneadultuserdata18.zip')
+			ReposDataLoc = mainloc + 'allinoneadultuserdata18.zip'
+			RepoDataZip = os.path.basename(ReposDataLoc)
+			repoDataGroup = os.path.join(packagesLoc, RepoDataZip)
+			dp = xbmcgui.DialogProgress()
+			dp.create(headTitle, 'Downloading big zip file... Please wait...', '[COLOR magenta]Đang tải zip file dung lượng lớn... Vui lòng chờ...[/COLOR]')
+			#shutil.copy(ReposLoc, repoGroup)
+			urllib.urlretrieve(ReposLoc, repoGroup)
+			#shutil.copy(ReposDataLoc, repoDataGroup)
+			urllib.urlretrieve(ReposDataLoc, repoDataGroup)
+			time.sleep(1)
+			dp.update(0, 'Extracting zip files... Please wait...', '[COLOR magenta]Đang giải nén zip files... Vui lòng chờ...[/COLOR]')
+			addonfolder = xbmc.translatePath('special://home')
+			extract_all(repoGroup, addonfolder, dp)
+			time.sleep(1)
+			extract_all(repoDataGroup, addonfolder, dp)
+			time.sleep(1)
+			update_repo()
+		else:
+			#ReposLoc = os.path.expanduser(r'~\Desktop\allinoneadult.zip')
+			ReposLoc = mainloc + 'allinoneadult.zip'
+			RepoZip = os.path.basename(ReposLoc)
+			repoGroup = os.path.join(packagesLoc, RepoZip)
+			#ReposDataLoc = os.path.expanduser(r'~\Desktop\allinoneadultuserdata.zip')
+			ReposDataLoc = mainloc + 'allinoneadultuserdata.zip'
+			RepoDataZip = os.path.basename(ReposDataLoc)
+			repoDataGroup = os.path.join(packagesLoc, RepoDataZip)
+			dp = xbmcgui.DialogProgress()
+			dp.create(headTitle, 'Downloading big zip file... Please wait...', '[COLOR magenta]Đang tải zip file dung lượng lớn... Vui lòng chờ...[/COLOR]')
+			#shutil.copy(ReposLoc, repoGroup)
+			urllib.urlretrieve(ReposLoc, repoGroup)
+			#shutil.copy(ReposDataLoc, repoDataGroup)
+			urllib.urlretrieve(ReposDataLoc, repoDataGroup)
+			time.sleep(1)
+			dp.update(0, 'Extracting zip files... Please wait...', '[COLOR magenta]Đang giải nén zip files... Vui lòng chờ...[/COLOR]')
+			addonfolder = xbmc.translatePath('special://home')
+			extract_all(repoGroup, addonfolder, dp)
+			time.sleep(1)
+			extract_all(repoDataGroup, addonfolder, dp)
+			time.sleep(1)
+			update_repo()
 	except:
 		pass
 	if os.path.isfile(repoGroup) == True:
 		os.remove(repoGroup)
+	elif os.path.isfile(repoDataGroup) == True:
+		os.remove(repoDataGroup)
 
 def tutorial_links(url):
 	content = make_request(url)
@@ -704,9 +751,7 @@ if mode == None or url == None or len(url) < 1:
 		d = dialog.yesno('Easy Installer [COLOR red]including Adult 18+[/COLOR]', '- Nhấn Có (Yes) để cài tất cả các [COLOR magenta]repos và add-ons[/COLOR] thông thường và [COLOR red]người lớn 18+.[/COLOR]')
 		if d:
 			try:
-				#ReposLoc = os.path.expanduser(r'~\Desktop\allinoneadult.zip')
-				ReposLoc = mainloc + 'allinoneadult.zip'
-				install_repos('Easy Installer [COLOR red]including Adult 18+[/COLOR]', ReposLoc)
+				install_repos('Easy Installer [COLOR red]including Adult 18+[/COLOR]')
 				os.remove(easyadultinstaller)
 				time.sleep(1)
 				setall_enable()
