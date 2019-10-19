@@ -61,7 +61,7 @@ VMF
 <title>[COLOR yellow]Game of Thrones - Season 08[/COLOR]</title>
 <link>plugin://plugin.video.vietmediaF/?action=play&url=https://www.fshare.vn/folder/UBRNMWG8IK18PO1</link>
 <thumbnail>https://i.postimg.cc/cJptvTnH/GOT.jpg</thumbnail>
-<mode>210</mode>
+<mode>555</mode>
 </item>
 
 ---------------------------------------------------------------

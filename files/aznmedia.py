@@ -208,6 +208,10 @@ def main():
 	addDir('[COLOR green][B]Add-on Settings[/B][/COLOR]', 'NoURL', 2, ico('settings'), True)
 
 def add_AVSource():
+	addDir('[COLOR blue][B]Play Fshare Link Using VNOP Addon[/B][/COLOR]', 'Fshare', 45, ico('fsharevip'), True)
+	addDir('[COLOR violet][B]Play Fshare Link Using VMF Addon[/B][/COLOR]', 'Fshare', 46, ico('fsharevip'), True)
+	addDir('[COLOR lightgreen][B]Play Fshare Link Using Xshare Addon[/B][/COLOR]', 'Fshare', 47, ico('fsharevip'), True)
+	addDir('[COLOR red][B]Play Google Drive Link Using VNOP Addon[/B][/COLOR]', 'GoogleDrive', 48, ico('GoogleDrive'), True)
 	addDir('[COLOR lime][B]Online Link - Link Trên Mạng[/B][/COLOR]', 'Online_AV', 40, ico('onlineav'), True)
 	addDir('[COLOR yellow][B]Play Local Video/Audio File - Play Video/Audio Trong Máy[/B][/COLOR]', 'Local_AV', 42, ico('localav'), True)
 	addDir('[COLOR cyan][B]Local M3U Playlist - M3U Playlist Trong Máy[/B][/COLOR]', 'localplaylist', 41, ico('local'), True)
@@ -587,6 +591,79 @@ def channelTester():
 	except:
 		pass
 
+def GoogleDrive_VNOP():
+	try:
+		keyb = xbmc.Keyboard('', 'Enter Google Drive Link: https://drive.google.com/file/d/xxxx')
+		keyb.doModal()
+		if (keyb.isConfirmed()):
+			url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			if 'https://drive.google.com/file/d/' in url:
+				url = url.replace('https://drive.google.com/file/d/','plugin://plugin.video.thongld.vnplaylist/play/https%3A%2F%2Fdrive.google.com%2Ffile%2Fd%2F') + '/View'
+			else:
+				url = ('plugin://plugin.video.thongld.vnplaylist/play/https%3A%2F%2Fdrive.google.com%2Ffile%2Fd%2F') + url + '/View'
+		if len(url) > 0:
+			thumb = 'https://bitbucket.org/aznmedia/repository.azn.media/raw/master/playlists/viplist/iconpath/GoogleDrive.png'
+			addDir('Google Drive Link', url, 1, thumb, False)
+	except:
+		pass
+
+def Fshare_VNOP():
+	try:
+		keyb = xbmc.Keyboard('', 'Enter Fshare Link')
+		keyb.doModal()
+		if (keyb.isConfirmed()):
+			url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			if 'file' in url: 
+				url = (url.replace('https://www.fshare.vn/file/','plugin://plugin.video.thongld.vnplaylist/play/https%3A%2F%2Fwww.fshare.vn%2Ffile%2F'))+'/FshareFile'
+			elif 'folder' in url:
+				url = (url.replace('https://www.fshare.vn/folder/','plugin://plugin.video.thongld.vnplaylist/fshare/https%3A%2F%2Fwww.fshare.vn%2Ffolder%2F'))+'/FshareFolder'
+		if len(url) > 0:
+			thumb = 'https://bitbucket.org/aznmedia/repository.azn.media/raw/master/playlists/viplist/fshare/icons/fsharevip.png'
+			if 'file' in url:
+				addDir('Fshare File', url, 1, thumb, False)
+			elif 'folder' in url:
+				addDir('Fshare Folder', url, 555, thumb, True)
+	except:
+		pass
+
+def Fshare_VMF():
+	try:
+		keyb = xbmc.Keyboard('', 'Enter Fshare Link')
+		keyb.doModal()
+		if (keyb.isConfirmed()):
+			url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			if 'file' in url: 
+				url = ('plugin://plugin.video.vietmediaF?action=play_direct_link_play&url=') + url
+			elif 'folder' in url:
+				url =('plugin://plugin.video.vietmediaF/?action=play&url=') + url
+		if len(url) > 0:
+			thumb = 'https://bitbucket.org/aznmedia/repository.azn.media/raw/master/playlists/viplist/fshare/icons/fsharevip.png'
+			if 'file' in url:
+				addDir('Fshare File', url, 1, thumb, False)
+			elif 'folder' in url:
+				addDir('Fshare Folder', url, 555, thumb, True)
+	except:
+		pass
+		
+def Fshare_Xshare():
+	try:
+		keyb = xbmc.Keyboard('', 'Enter Fshare Link')
+		keyb.doModal()
+		if (keyb.isConfirmed()):
+			url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			if 'file' in url: 
+				url = ('plugin://plugin.video.xshare/?mode=3&page=0&url=') + url
+			elif 'folder' in url:
+				url = ('plugin://plugin.video.xshare/?mode=90&page=0&url=') + url
+		if len(url) > 0:
+			thumb = 'https://bitbucket.org/aznmedia/repository.azn.media/raw/master/playlists/viplist/fshare/icons/fsharevip.png'
+			if 'file' in url:
+				addDir('Fshare File', url, 1, thumb, False)
+			elif 'folder' in url:
+				addDir('Fshare Folder', url, 555, thumb, True)
+	except:
+		pass
+
 def play_localav():
 	local_av = mysettings.getSetting('local_av')
 	if len(local_av) < 1:
@@ -830,6 +907,18 @@ elif mode == 43:
 
 elif mode == 44:
 	XML_Tester()
+
+elif mode == 45:
+	Fshare_VNOP()
+
+elif mode == 46:
+	Fshare_VMF()
+
+elif mode == 47:
+	Fshare_Xshare()
+
+elif mode == 48:
+	GoogleDrive_VNOP()
 
 elif mode == 50:
 	clear_cache()
