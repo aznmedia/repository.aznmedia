@@ -538,13 +538,15 @@ def channelTester():
 
 def GoogleDrive_VNOP():
 	try:
-		keyb = xbmc.Keyboard('', 'Enter Google Drive Link: https://drive.google.com/file/d/xxxx')
+		keyb = xbmc.Keyboard('', 'Enter Google Drive Link')
 		keyb.doModal()
 		if (keyb.isConfirmed()):
 			url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
 			if 'https://drive.google.com/file/d/' in url:
 				url = url.replace('https://drive.google.com/file/d/','plugin://plugin.video.thongld.vnplaylist/play/https%3A%2F%2Fdrive.google.com%2Ffile%2Fd%2F') + '/View'
-			else:
+			elif 'https://drive.google.com/open?id=' in url:
+				url = url.replace('https://drive.google.com/open?id=','plugin://plugin.video.thongld.vnplaylist/play/https%3A%2F%2Fdrive.google.com%2Ffile%2Fd%2F') + '/View'
+			elif 'https://drive.google.com' not in url:
 				url = ('plugin://plugin.video.thongld.vnplaylist/play/https%3A%2F%2Fdrive.google.com%2Ffile%2Fd%2F') + url + '/View'
 		if len(url) > 0:
 			thumb = 'https://bitbucket.org/aznmedia/repository.azn.media/raw/master/playlists/viplist/iconpath/GoogleDrive.png'
