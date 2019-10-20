@@ -606,6 +606,8 @@ def GoogleDrive_VNOP():
 		if len(url) > 0:
 			thumb = 'https://bitbucket.org/aznmedia/repository.azn.media/raw/master/playlists/viplist/iconpath/GoogleDrive.png'
 			addDir('Google Drive Link', url, 1, thumb, False)
+		elif len(url) <=0:
+			pass
 	except:
 		pass
 
