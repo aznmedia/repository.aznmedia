@@ -92,7 +92,7 @@ def collections(url):
 			thumb = icon
 		title = title.strip()
 		link = link.strip()
-		if ('https://www.youtube.com/user/' in link) or ('https://www.youtube.com/channel/' in link) or ('plugin.video.xshare/?mode=90&page=0&url' in link):
+		if ('https://www.youtube.com/user/' in link) or ('https://www.youtube.com/channel/' in link) or ('plugin.video.xshare/?mode=90&page=0&url' in link) or ('plugin://plugin.video.azn.thuynga' in link):
 			add_dir(title, link, 100, thumb, fanartlogo)
 		else:
 			add_link(title, link, thumb, fanartlogo)
@@ -123,7 +123,7 @@ def add_dir(name, url, mode, iconimage, fanart):
 	liz.setProperty("Fanart_Image", fanart)
 	if ('https://www.youtube.com/user/' in url) or ('https://www.youtube.com/channel/' in url):
 		u = 'plugin://plugin.video.youtube/%s/%s/' % (url.split( '/' )[-2], url.split( '/' )[-1])
-	elif 'plugin.video.xshare' in url:
+	elif ('plugin.video.xshare/?mode=90&page=0&url' in url) or ('plugin://plugin.video.azn.thuynga' in url):
 		u = url
 	ok=xbmcplugin.addDirectoryItem(int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
 	return ok
