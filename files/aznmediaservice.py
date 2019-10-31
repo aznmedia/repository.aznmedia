@@ -9,10 +9,12 @@ thongAddons=["plugin.video.kodi4vn."+x for x in ["bilutv","launcher","moviebox",
 
 def start_up():
 	try:
+		del_packages()
 		xbmcaddon.Addon("plugin.video.azn.media").setSetting(id="enable_adult_section", value="false")	# Disable adult section on AznMedia add-on at startup.
 		hide_adult_addons()
+		#xbmcaddon.Addon("plugin.video.azn.media").setSetting(id="enable_adult_section", value="true")	# Enable adult section on AznMedia add-on at startup.
 		#show_adult_addons()
-		noAds()
+		#noAds()
 	except:
 		pass
 
@@ -68,6 +70,18 @@ def noAds():	# Remove VietTV24's ads.
 						f.truncate()
 			else:
 				pass
+	except:
+		pass
+
+def del_packages(): 	# Delete all add-on zipfiles in packages
+	try:
+		for root, dirs, files in os.walk(xbmc.translatePath('special://home/addons/packages')):
+			file_count = 0
+			file_count += len(files)
+			for f in files:
+				os.unlink(os.path.join(root, f))
+			for d in dirs:
+				shutil.rmtree(os.path.join(root, d))
 	except:
 		pass
 

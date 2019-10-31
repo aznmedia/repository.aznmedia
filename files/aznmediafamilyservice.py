@@ -8,6 +8,7 @@ adultAddons=["plugin.video.tnp.mediashare"]
 
 def start_up():
 	try:
+		del_packages()
 		remove_adult_sections()
 		#add_adult_sections()
 	except:
@@ -66,6 +67,18 @@ def add_adult_sections():	# Add adult sections back to cCloudTV and MediaShare a
 								f.write(content)
 			else:
 				pass
+	except:
+		pass
+
+def del_packages(): 	# Delete all add-on zipfiles in packages
+	try:
+		for root, dirs, files in os.walk(xbmc.translatePath('special://home/addons/packages')):
+			file_count = 0
+			file_count += len(files)
+			for f in files:
+				os.unlink(os.path.join(root, f))
+			for d in dirs:
+				shutil.rmtree(os.path.join(root, d))
 	except:
 		pass
 
