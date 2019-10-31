@@ -242,7 +242,7 @@ def clear_cache():  #### plugin.video.xbmchubmaintenance ####
 						clearcache()
 						dialog.ok('Delete Kodi Cache Files', 'Done', "", '[COLOR magenta]Đã làm xong[/COLOR]')
 				else:
-					dialog.ok('Delete Kodi Cache Files', 'Cache has been cleared.')
+					sys.exit(0)
 	except:
 		pass
 	sys.exit(0)
@@ -293,17 +293,19 @@ def del_thumbnails():  #### script.rawmaintenance ####
 	thumbnailPath = xbmc.translatePath('special://thumbnails')
 	try:
 		if os.path.exists(thumbnailPath)==True:  
-				if dialog.yesno('Delete Thumbnails', 'This option deletes all thumbnails.', 'Are you sure you want to do this?', '[COLOR magenta]Bạn có muốn xoá tất cả các thumbnails không?[/COLOR]'):
-					for root, dirs, files in os.walk(thumbnailPath):
-						file_count = 0
-						file_count += len(files)
-						if file_count > 0:
-							for f in files:
-								try:
-									os.unlink(os.path.join(root, f))
-								except:
-									pass
-					dialog.ok('Delete Thumbnails', 'Please manually restart Kodi to rebuild thumbnail library.', '[COLOR magenta]Vui lòng tự khởi động lại Kodi để tái tạo lại thư viện thumbnail.[/COLOR]')
+			if dialog.yesno('Delete Thumbnails', 'This option deletes all thumbnails.', 'Are you sure you want to do this?', '[COLOR magenta]Bạn có muốn xoá tất cả các thumbnails không?[/COLOR]'):
+				for root, dirs, files in os.walk(thumbnailPath):
+					file_count = 0
+					file_count += len(files)
+					if file_count > 0:
+						for f in files:
+							try:
+								os.unlink(os.path.join(root, f))
+							except:
+								pass
+				dialog.ok('Delete Thumbnails', 'Please manually restart Kodi to rebuild thumbnail library.', '[COLOR magenta]Vui lòng tự khởi động lại Kodi để tái tạo lại thư viện thumbnail.[/COLOR]')
+			else:
+				sys.exit(0)
 	except:
 		pass
 	sys.exit(0)
@@ -314,7 +316,7 @@ def clear_LastPlayed():
 		if os.path.exists(historyFile)==True:
 			if dialog.yesno('Clear history cache of Last Played Add-on', 'Bạn có muốn xoá toàn bộ danh sách lưu trữ của Last Played Add-on không?'):
 				os.remove(historyFile)
-				dialog.ok('Clear history cache of Last Played Add-on', 'Done.', '[COLOR magenta]Xong.[/COLOR]')
+				dialog.ok('Clear history cache of Last Played Add-on', 'Done', "", '[COLOR magenta]Đã làm xong[/COLOR]')
 			else:
 				sys.exit(0)
 		else:
@@ -606,8 +608,6 @@ def GoogleDrive_VNOP():
 		if len(url) > 0:
 			thumb = 'https://bitbucket.org/aznmedia/repository.azn.media/raw/master/playlists/viplist/iconpath/GoogleDrive.png'
 			addDir('Google Drive Link', url, 1, thumb, False)
-		elif len(url) <=0:
-			pass
 	except:
 		pass
 
