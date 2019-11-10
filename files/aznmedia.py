@@ -211,7 +211,8 @@ def add_AVSource():
 	addDir('[COLOR blue][B]Play Fshare Link Using VNOP Addon[/B][/COLOR]', 'Fshare', 45, ico('fsharevip'), True)
 	addDir('[COLOR violet][B]Play Fshare Link Using VMF Addon[/B][/COLOR]', 'Fshare', 46, ico('fsharevip'), True)
 	addDir('[COLOR lightgreen][B]Play Fshare Link Using Xshare Addon[/B][/COLOR]', 'Fshare', 47, ico('fsharevip'), True)
-	addDir('[COLOR red][B]Play Google Drive Link Using VNOP Addon[/B][/COLOR]', 'GoogleDrive', 48, ico('GoogleDrive'), True)
+	addDir('[COLOR red][B]Play Google Drive Link Using VNOP Addon[/B][/COLOR]', 'VNOPGoogleDrive', 48, ico('GoogleDrive'), True)
+	addDir('[COLOR magenta][B]Play Google Drive Link Using VMF Addon[/B][/COLOR]', 'VMFGoogleDrive', 49, ico('GoogleDrive'), True)
 	addDir('[COLOR lime][B]Online Link - Link Trên Mạng[/B][/COLOR]', 'Online_AV', 40, ico('onlineav'), True)
 	addDir('[COLOR yellow][B]Play Local Video/Audio File - Play Video/Audio Trong Máy[/B][/COLOR]', 'Local_AV', 42, ico('localav'), True)
 	addDir('[COLOR cyan][B]Local M3U Playlist - M3U Playlist Trong Máy[/B][/COLOR]', 'localplaylist', 41, ico('local'), True)
@@ -283,8 +284,8 @@ def del_packages():  #### plugin.video.xbmchubmaintenance ####
 					for d in dirs:
 						shutil.rmtree(os.path.join(root, d))
 					dialog.ok('Delete Package Cache Files', 'Done', "", '[COLOR magenta]Đã làm xong[/COLOR]')
-			else:
-				dialog.ok('Delete Package Cache Files', 'No zip file found.', "", '[COLOR magenta]Không tìm thấy zip file.[/COLOR]')
+				else:
+					sys.exit(0)
 	except:
 		pass
 	sys.exit(0)
@@ -293,19 +294,19 @@ def del_thumbnails():  #### script.rawmaintenance ####
 	thumbnailPath = xbmc.translatePath('special://thumbnails')
 	try:
 		if os.path.exists(thumbnailPath)==True:  
-			if dialog.yesno('Delete Thumbnails', 'This option deletes all thumbnails.', 'Are you sure you want to do this?', '[COLOR magenta]Bạn có muốn xoá tất cả các thumbnails không?[/COLOR]'):
-				for root, dirs, files in os.walk(thumbnailPath):
-					file_count = 0
-					file_count += len(files)
-					if file_count > 0:
-						for f in files:
-							try:
-								os.unlink(os.path.join(root, f))
-							except:
-								pass
-				dialog.ok('Delete Thumbnails', 'Please manually restart Kodi to rebuild thumbnail library.', '[COLOR magenta]Vui lòng tự khởi động lại Kodi để tái tạo lại thư viện thumbnail.[/COLOR]')
-			else:
-				sys.exit(0)
+				if dialog.yesno('Delete Thumbnails', 'This option deletes all thumbnails.', 'Are you sure you want to do this?', '[COLOR magenta]Bạn có muốn xoá tất cả các thumbnails không?[/COLOR]'):
+					for root, dirs, files in os.walk(thumbnailPath):
+						file_count = 0
+						file_count += len(files)
+						if file_count > 0:
+							for f in files:
+								try:
+									os.unlink(os.path.join(root, f))
+								except:
+									pass
+					dialog.ok('Delete Thumbnails', 'Please manually restart Kodi to rebuild thumbnail library.', '[COLOR magenta]Vui lòng tự khởi động lại Kodi để tái tạo lại thư viện thumbnail.[/COLOR]')
+				else:
+					sys.exit(0)
 	except:
 		pass
 	sys.exit(0)
@@ -319,8 +320,6 @@ def clear_LastPlayed():
 				dialog.ok('Clear history cache of Last Played Add-on', 'Done', "", '[COLOR magenta]Đã làm xong[/COLOR]')
 			else:
 				sys.exit(0)
-		else:
-			dialog.ok('Clear history cache of Last Played Add-on', 'Không tìm thấy danh sách lưu trữ của Last Played Add-on.')
 	except:
 		pass
 	sys.exit(0)
@@ -607,7 +606,7 @@ def GoogleDrive_VNOP():
 				url = ('plugin://plugin.video.thongld.vnplaylist/play/https%3A%2F%2Fdrive.google.com%2Ffile%2Fd%2F') + url + '/View'
 		if len(url) > 0:
 			thumb = 'https://bitbucket.org/aznmedia/repository.azn.media/raw/master/playlists/viplist/iconpath/GoogleDrive.png'
-			addDir('Google Drive Link', url, 1, thumb, False)
+			addDir('VNOP Google Drive Link', url, 1, thumb, False)
 	except:
 		pass
 
@@ -630,6 +629,24 @@ def Fshare_VNOP():
 	except:
 		pass
 
+def GoogleDrive_VMF():
+	try:
+		keyb = xbmc.Keyboard('', 'Enter Google Drive Link')
+		keyb.doModal()
+		if (keyb.isConfirmed()):
+			url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			if 'https://drive.google.com/file/d/' in url:
+				url = 'plugin://plugin.video.vietmediaF?action=play&url=' + url
+			elif 'https://drive.google.com/open?id=' in url:
+				url = 'plugin://plugin.video.vietmediaF?action=play&url=' + url.replace('https://drive.google.com/open?id=','https://drive.google.com/file/d/') + '/View'
+			elif 'https://drive.google.com' not in url:
+				url = ('plugin://plugin.video.vietmediaF?action=play&url=https://drive.google.com/file/d/') + url + '/View'
+		if len(url) > 0:
+			thumb = 'https://bitbucket.org/aznmedia/repository.azn.media/raw/master/playlists/viplist/iconpath/GoogleDrive.png'
+			addDir('VMF Google Drive Link', url, 1, thumb, False)
+	except:
+		pass
+
 def Fshare_VMF():
 	try:
 		keyb = xbmc.Keyboard('', 'Enter Fshare Link')
@@ -648,7 +665,7 @@ def Fshare_VMF():
 				addDir('Fshare Folder', url, 555, thumb, True)
 	except:
 		pass
-		
+
 def Fshare_Xshare():
 	try:
 		keyb = xbmc.Keyboard('', 'Enter Fshare Link')
@@ -923,6 +940,9 @@ elif mode == 47:
 
 elif mode == 48:
 	GoogleDrive_VNOP()
+
+elif mode == 49:
+	GoogleDrive_VMF()
 
 elif mode == 50:
 	clear_cache()

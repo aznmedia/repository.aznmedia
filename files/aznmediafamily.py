@@ -204,7 +204,8 @@ def add_AVSource():
 	addDir('[COLOR blue][B]Play Fshare Link Using VNOP Addon[/B][/COLOR]', 'Fshare', 45, ico('fsharevip'), True)
 	addDir('[COLOR violet][B]Play Fshare Link Using VMF Addon[/B][/COLOR]', 'Fshare', 46, ico('fsharevip'), True)
 	addDir('[COLOR lightgreen][B]Play Fshare Link Using Xshare Addon[/B][/COLOR]', 'Fshare', 47, ico('fsharevip'), True)
-	addDir('[COLOR red][B]Play Google Drive Link Using VNOP Addon[/B][/COLOR]', 'GoogleDrive', 48, ico('GoogleDrive'), True)
+	addDir('[COLOR red][B]Play Google Drive Link Using VNOP Addon[/B][/COLOR]', 'VNOPGoogleDrive', 48, ico('GoogleDrive'), True)
+	addDir('[COLOR magenta][B]Play Google Drive Link Using VMF Addon[/B][/COLOR]', 'VMFGoogleDrive', 49, ico('GoogleDrive'), True)
 	addDir('[COLOR lime][B]Online Link - Link Trên Mạng[/B][/COLOR]', 'Online_AV', 40, ico('onlineav'), True)
 	addDir('[COLOR yellow][B]Play Local Video/Audio File - Play Video/Audio Trong Máy[/B][/COLOR]', 'Local_AV', 42, ico('localav'), True)
 	addDir('[COLOR cyan][B]Local M3U Playlist - M3U Playlist Trong Máy[/B][/COLOR]', 'localplaylist', 41, ico('local'), True)
@@ -575,6 +576,24 @@ def Fshare_VNOP():
 	except:
 		pass
 
+def GoogleDrive_VMF():
+	try:
+		keyb = xbmc.Keyboard('', 'Enter Google Drive Link')
+		keyb.doModal()
+		if (keyb.isConfirmed()):
+			url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			if 'https://drive.google.com/file/d/' in url:
+				url = 'plugin://plugin.video.vietmediaF?action=play&url=' + url
+			elif 'https://drive.google.com/open?id=' in url:
+				url = 'plugin://plugin.video.vietmediaF?action=play&url=' + url.replace('https://drive.google.com/open?id=','https://drive.google.com/file/d/') + '/View'
+			elif 'https://drive.google.com' not in url:
+				url = ('plugin://plugin.video.vietmediaF?action=play&url=https://drive.google.com/file/d/') + url + '/View'
+		if len(url) > 0:
+			thumb = 'https://bitbucket.org/aznmedia/repository.azn.media/raw/master/playlists/viplist/iconpath/GoogleDrive.png'
+			addDir('VMF Google Drive Link', url, 1, thumb, False)
+	except:
+		pass
+
 def Fshare_VMF():
 	try:
 		keyb = xbmc.Keyboard('', 'Enter Fshare Link')
@@ -830,6 +849,9 @@ elif mode == 47:
 
 elif mode == 48:
 	GoogleDrive_VNOP()
+
+elif mode == 49:
+	GoogleDrive_VMF()
 
 elif mode == 50:
 	clear_cache()
