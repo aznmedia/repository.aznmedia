@@ -553,7 +553,7 @@ def GoogleDrive_VNOP():
 				url = ('plugin://plugin.video.thongld.vnplaylist/play/https%3A%2F%2Fdrive.google.com%2Ffile%2Fd%2F') + url + '/View'
 		if len(url) > 0:
 			thumb = 'https://bitbucket.org/aznmedia/repository.azn.media/raw/master/playlists/viplist/iconpath/GoogleDrive.png'
-			addDir('Google Drive Link', url, 1, thumb, False)
+			addDir('VNOP Google Drive Link', url, 1, thumb, False)
 	except:
 		pass
 
