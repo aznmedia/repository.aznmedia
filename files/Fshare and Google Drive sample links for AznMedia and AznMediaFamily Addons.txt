@@ -56,6 +56,7 @@ Mode 555 = nonexistence
 </item>
 
 VMF
+Mode 555 = nonexistence
 
 <item>
 <title>[COLOR yellow]Game of Thrones - Season 08[/COLOR]</title>
@@ -88,3 +89,14 @@ VNOP
 <thumbnail>https://images2.imgbox.com/18/7c/UIYx8spA_o.png</thumbnail>
 <mode>1</mode>
 </item>
+
+
+VMF
+
+<item>
+<title>[COLOR yellow]PBN 128 [/COLOR][COLOR red][/COLOR]: [COLOR lime]Hành trình 35 năm Phần 3[/COLOR]</title>
+<link>plugin://plugin.video.vietmediaF?action=play&url=https://drive.google.com/file/d/1_8i1BQ3ha6CkDwYNUtek8qJdV1kbFOrk/view</link>
+<thumbnail>https://images2.imgbox.com/18/7c/UIYx8spA_o.png</thumbnail>
+<mode>1</mode>
+</item>
+
