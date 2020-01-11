@@ -43,6 +43,7 @@ if response == '2':
 	ff.write('<?xml version="1.0" encoding="utf-8" standalone="yes"?>\n\n<channel>\n<items>\n\n')
 	match = re.compile('<favourite name="(.*?)"(.+?)\&quot;(.+?)\&quot;.*\)<\/favourite>').findall(content)
 	for name, mode, url in match:
+		url = url.replace('&amp;', '&')
 		if "ActivateWindow" in mode:
 			ff.write('<item>\n<title>'+name+'</title>\n<link>'+url+'</link>\n<thumbnail>'+thumb+'</thumbnail>\n<mode>300</mode>\n</item>\n\n')
 		elif "PlayMedia" in mode:
