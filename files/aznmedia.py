@@ -552,7 +552,7 @@ def play_other_video(url):
 	xbmc.sleep(1000)
 	xbmc.Player().play(url, item, False, -1)
 
-def play_video(url):
+def play_video(url): ##### PlayMedia (favorite) --> mode = 1 [use def play_video(url)]
 	if url.startswith('idn'):
 		url = 'http://www.giniko.com/watch.php?id=%s' % url.split('=')[-1]
 		url = re.compile('file: "(.+?)"').findall(make_request(url))[0]
@@ -567,6 +567,9 @@ def play_video(url):
 		except:
 			pass
 	return
+
+def play_favorite_ActivateWindow(url): ##### ActivateWindow (favorite) --> mode = 300  [use def play_favorite(url)]    ##### PlayMedia (favorite) --> mode = 1 [use above def play_video(url)]
+	xbmc.executebuiltin("ActivateWindow(10025,%s)"%url)
 
 def channelTester():
 	try:
@@ -991,4 +994,6 @@ elif mode == 210:
 elif mode == 220:
 	run_exodus()
 
+elif mode == 300:
+	play_favorite_ActivateWindow(url)
 xbmcplugin.endOfDirectory(plugin_handle)
