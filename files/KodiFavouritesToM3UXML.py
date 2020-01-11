@@ -44,8 +44,8 @@ if response == '2':
 	match = re.compile('<favourite name="(.*?)"(.+?)\&quot;(.+?)\&quot;.*\)<\/favourite>').findall(content)
 	for name, mode, url in match:
 		if "ActivateWindow" in mode:
-			ff.write('<item>\n<title>'+name+'</title>\n<link>'+url+'</link>\n<thumbnail>'+thumb+'</thumbnail>\n<mode>300</mode>\n</item>\n')
+			ff.write('<item>\n<title>'+name+'</title>\n<link>'+url+'</link>\n<thumbnail>'+thumb+'</thumbnail>\n<mode>300</mode>\n</item>\n\n')
 		elif "PlayMedia" in mode:
-			ff.write('<item>\n<title>'+name+'</title>\n<link>'+url+'</link>\n<thumbnail>'+thumb+'</thumbnail>\n<mode>1</mode>\n</item>\n')
-	ff.write('\n</items>\n</channel>')
+			ff.write('<item>\n<title>'+name+'</title>\n<link>'+url+'</link>\n<thumbnail>'+thumb+'</thumbnail>\n<mode>1</mode>\n</item>\n\n')
+	ff.write('</items>\n</channel>')
 	ff.close()
