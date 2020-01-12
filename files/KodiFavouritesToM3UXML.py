@@ -15,7 +15,6 @@ import re, os, time
 KodiFavourite = os.path.expanduser('~/AppData/Roaming/Kodi/userdata/favourites.xml')
 m3u_dst = os.path.expanduser('~/Desktop/KodiFavourites.m3u')
 xml_dst = os.path.expanduser('~/Desktop/KodiFavourites.xml')
-thumb = "https://bitbucket.org/aznmedia/repository.azn.media/raw/master/playlists/viplist/iconpath/favourites.png"
 
 f = open(KodiFavourite, 'r')
 content = f.read()
@@ -29,6 +28,10 @@ if response == '1':
 	match = re.compile('<favourite name="(.*?)"(.+?)\&quot;(.+?)\&quot;.*\)<\/favourite>').findall(content)
 	for name, mode, url in match:
 		url = url.replace('&amp;', '&')
+		if "thumb" in mode:
+			thumb = re.compile('thumb="(.*?)">').findall(mode)[0]
+		else:
+			thumb = "https://www.freeiconspng.com/uploads/favorites-icon-png-29.png"
 		if "ActivateWindow" in mode:
 			pass
 		elif "PlayMedia" in mode:
@@ -44,6 +47,10 @@ if response == '2':
 	match = re.compile('<favourite name="(.*?)"(.+?)\&quot;(.+?)\&quot;.*\)<\/favourite>').findall(content)
 	for name, mode, url in match:
 		url = url.replace('&amp;', '&')
+		if "thumb" in mode:
+			thumb = re.compile('thumb="(.*?)">').findall(mode)[0]
+		else:
+			thumb = "https://www.freeiconspng.com/uploads/favorites-icon-png-29.png"
 		if "ActivateWindow" in mode:
 			ff.write('<item>\n<title>'+name+'</title>\n<link>'+url+'</link>\n<thumbnail>'+thumb+'</thumbnail>\n<mode>300</mode>\n</item>\n\n')
 		elif "PlayMedia" in mode:
