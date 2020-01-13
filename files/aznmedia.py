@@ -337,7 +337,7 @@ def other_sources_list(url, iconimage):
 			m3u_playlist(name, url, thumb)
 		except:
 			pass
-
+"""
 def m3u_playlist(name, url, thumb):
 	name = re.sub('\s+', ' ', name).strip()
 	url = url.replace('"', ' ').replace('&amp;', '&').strip()
@@ -371,6 +371,27 @@ def m3u_playlist(name, url, thumb):
 				addDir(name, url, 1, thumb, False)
 			else:
 				addDir(name, url, 1, icon, False)
+"""
+
+def m3u_playlist(name, url, thumb):
+	name = re.sub('\s+', ' ', name).strip()
+	url = url.replace('"', ' ').replace('&amp;', '&').strip()
+	if any(x in url for x in ['youtube.com/user/', 'youtube.com/channel/', 'youtube/user/', 'youtube/channel/']):
+		if 'tvg-logo' in thumb:
+			thumb = re.compile(m3u_thumb_regex).findall(str(thumb))[0].replace(' ', '%20')
+			addDir(name, url, '', thumb, True)
+		else:
+			addDir(name, url, '', icon, True)
+	else:
+		if 'youtube.com/watch?v=' in url:
+			url = ('plugin://plugin.video.youtube/play/?video_id=%s' % (url.split('=')[-1]))
+		else:
+			url = url
+		if 'tvg-logo' in thumb:
+			thumb = re.compile(m3u_thumb_regex).findall(str(thumb))[0].replace(' ', '%20')
+			addDir(name, url, 1, thumb, False)
+		else:
+			addDir(name, url, 1, icon, False)
 
 def other_addons():
 	get_m3u(otheraddons)
