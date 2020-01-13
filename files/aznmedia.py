@@ -337,6 +337,7 @@ def other_sources_list(url, iconimage):
 			m3u_playlist(name, url, thumb)
 		except:
 			pass
+
 """
 def m3u_playlist(name, url, thumb):
 	name = re.sub('\s+', ' ', name).strip()
