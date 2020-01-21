@@ -4,7 +4,8 @@
 
 from sqlite3 import dbapi2 as db_lib
 import xbmc, xbmcgui, xbmcplugin, xbmcaddon
-import urllib.request, sys, re, os, shutil, base64, time, zipfile
+import urllib, sys, re, os, shutil, base64, time, zipfile
+from urllib.request import Request, urlopen
 from urllib.parse import quote_plus
 
 KodiVersion = int(xbmc.getInfoLabel("System.BuildVersion")[:2])
@@ -42,9 +43,9 @@ myDict = {';':'', '&amp;':'&', '&quot;':'"', '.':' ', '&#39;':'\'', '&#038;':'&'
 
 def make_request(url):
 	try:
-		#req = urllib.request(url)
-		#req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0')
-		response = urllib.request.urlopen(url)
+		req = Request(url)
+		req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0')
+		response = urlopen(req)
 		link = response.read().decode('utf-8')
 		response.close()
 		return link
