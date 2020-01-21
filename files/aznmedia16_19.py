@@ -5,10 +5,14 @@
 from sqlite3 import dbapi2 as db_lib
 import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 import urllib, sys, re, os, shutil, base64, time, zipfile
-from urllib.request import Request, urlopen
-from urllib.parse import quote_plus
 
 KodiVersion = int(xbmc.getInfoLabel("System.BuildVersion")[:2])
+if KodiVersion > 18:
+	from urllib.request import Request, urlopen
+	from urllib.parse import quote_plus
+else:
+	import urllib2
+
 plugin_handle = int(sys.argv[1])
 
 Addon_ID = xbmcaddon.Addon().getAddonInfo('id')
@@ -42,15 +46,26 @@ myDict = {';':'', '&amp;':'&', '&quot;':'"', '.':' ', '&#39;':'\'', '&#038;':'&'
 #xbmc.log("Printing skinname: %s"%skinname,xbmc.LOGNOTICE)
 
 def make_request(url):
-	try:
-		req = Request(url)
-		req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0')
-		response = urlopen(req)
-		link = response.read().decode('utf-8')
-		response.close()
-		return link
-	except:
-		pass
+	if KodiVersion > 18:
+		try:
+			req = Request(url)
+			req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0')
+			response = urlopen(req)
+			link = response.read().decode('utf-8')
+			response.close()
+			return link
+		except:
+			pass
+	else:
+		try:
+			req = urllib2.Request(url)
+			req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0')
+			response = urllib2.urlopen(req)
+			link = response.read()
+			response.close()
+			return link
+		except:
+			pass
 
 def read_file(file):
 	try:
@@ -197,7 +212,7 @@ def run_exodus():
 def main():
 	#addDir('[COLOR lightblue][B]Viet Hai Ngoai 2[/B][/COLOR]', 'plugin://plugin.tivi9999.viettv24', 999, 'https://bitbucket.org/aznmedia/repository.azn.media/raw/master/playlists/viplist/icons/viettv24_2.png', True)
 	content = make_request(mainmenu)
-	xbmc.log("Printing content: %s"%content,xbmc.LOGNOTICE)
+	#xbmc.log("Printing content: %s"%content,xbmc.LOGNOTICE)
 	#content = read_file(os.path.expanduser(r'~\Desktop\mainmenu.xml'))
 	match = re.compile('<title>(.*?)</title>\s*<link>(.*?)</link>\s*<thumbnail>(.*?)</thumbnail>\s*<mode>(.*?)</mode>').findall(content)
 	for name, url, thumb, mode in match:
@@ -420,7 +435,30 @@ def install_repos(headTitle):
 	except:
 		pass
 	try:
-		if KodiVersion > 17:
+		if KodiVersion > 18:
+			#ReposLoc = os.path.expanduser(r'~\Desktop\allinoneadult19.zip')
+			ReposLoc = mainloc + 'allinoneadult19.zip'  #https://bitbucket.org/aznmedia/repository.azn.media/raw/master/RepoZips/allinoneadult19.zip
+			RepoZip = os.path.basename(ReposLoc) #allinoneadult19.zip
+			repoGroup = os.path.join(packagesLoc, RepoZip) #xbmc.translatePath('special://home/addons/packages/allinoneadult19.zip')
+			#ReposDataLoc = os.path.expanduser(r'~\Desktop\allinoneadultuserdata19.zip')
+			ReposDataLoc = mainloc + 'allinoneadultuserdata18.zip' #https://bitbucket.org/aznmedia/repository.azn.media/raw/master/RepoZips/allinoneadultuserdata19.zip
+			RepoDataZip = os.path.basename(ReposDataLoc) #allinoneadultuserdata19.zip
+			repoDataGroup = os.path.join(packagesLoc, RepoDataZip) #xbmc.translatePath('special://home/addons/packages/allinoneadultuserdata19.zip')
+			dp = xbmcgui.DialogProgress()
+			dp.create(headTitle, 'Downloading big zip file... Please wait...', '[COLOR magenta]Đang tải zip file dung lượng lớn... Vui lòng chờ...[/COLOR]')
+			#shutil.copy(ReposLoc, repoGroup)
+			urllib.request.urlretrieve(ReposLoc, repoGroup) #(https://bitbucket.org/aznmedia/repository.azn.media/raw/master/RepoZips/allinoneadult19.zip, xbmc.translatePath('special://home/addons/packages/allinoneadult19.zip'))
+			#shutil.copy(ReposDataLoc, repoDataGroup)
+			urllib.request.urlretrieve(ReposDataLoc, repoDataGroup) #(https://bitbucket.org/aznmedia/repository.azn.media/raw/master/RepoZips/allinoneadultuserdata19.zip, xbmc.translatePath('special://home/addons/packages/allinoneadultuserdata19.zip'))
+			time.sleep(1)
+			dp.update(0, 'Extracting zip files... Please wait...', '[COLOR magenta]Đang giải nén zip files... Vui lòng chờ...[/COLOR]')
+			addonfolder = xbmc.translatePath('special://home')
+			extract_all(repoGroup, addonfolder, dp)
+			time.sleep(1)
+			extract_all(repoDataGroup, addonfolder, dp)
+			time.sleep(1)
+			update_repo()
+		elif KodiVersion == 18:
 			#ReposLoc = os.path.expanduser(r'~\Desktop\allinoneadult18.zip')
 			ReposLoc = mainloc + 'allinoneadult18.zip'  #https://bitbucket.org/aznmedia/repository.azn.media/raw/master/RepoZips/allinoneadult18.zip
 			RepoZip = os.path.basename(ReposLoc) #allinoneadult18.zip
@@ -432,9 +470,9 @@ def install_repos(headTitle):
 			dp = xbmcgui.DialogProgress()
 			dp.create(headTitle, 'Downloading big zip file... Please wait...', '[COLOR magenta]Đang tải zip file dung lượng lớn... Vui lòng chờ...[/COLOR]')
 			#shutil.copy(ReposLoc, repoGroup)
-			urllib.request.urlretrieve(ReposLoc, repoGroup) #(https://bitbucket.org/aznmedia/repository.azn.media/raw/master/RepoZips/allinoneadult18.zip, xbmc.translatePath('special://home/addons/packages/allinoneadult18.zip'))
+			urllib.urlretrieve(ReposLoc, repoGroup) #(https://bitbucket.org/aznmedia/repository.azn.media/raw/master/RepoZips/allinoneadult18.zip, xbmc.translatePath('special://home/addons/packages/allinoneadult18.zip'))
 			#shutil.copy(ReposDataLoc, repoDataGroup)
-			urllib.request.urlretrieve(ReposDataLoc, repoDataGroup) #(https://bitbucket.org/aznmedia/repository.azn.media/raw/master/RepoZips/allinoneadultuserdata18.zip, xbmc.translatePath('special://home/addons/packages/allinoneadultuserdata18.zip'))
+			urllib.urlretrieve(ReposDataLoc, repoDataGroup) #(https://bitbucket.org/aznmedia/repository.azn.media/raw/master/RepoZips/allinoneadultuserdata18.zip, xbmc.translatePath('special://home/addons/packages/allinoneadultuserdata18.zip'))
 			time.sleep(1)
 			dp.update(0, 'Extracting zip files... Please wait...', '[COLOR magenta]Đang giải nén zip files... Vui lòng chờ...[/COLOR]')
 			addonfolder = xbmc.translatePath('special://home')
@@ -455,9 +493,9 @@ def install_repos(headTitle):
 			dp = xbmcgui.DialogProgress()
 			dp.create(headTitle, 'Downloading big zip file... Please wait...', '[COLOR magenta]Đang tải zip file dung lượng lớn... Vui lòng chờ...[/COLOR]')
 			#shutil.copy(ReposLoc, repoGroup)
-			urllib.request.urlretrieve(ReposLoc, repoGroup)
+			urllib.urlretrieve(ReposLoc, repoGroup)
 			#shutil.copy(ReposDataLoc, repoDataGroup)
-			urllib.request.urlretrieve(ReposDataLoc, repoDataGroup)
+			urllib.urlretrieve(ReposDataLoc, repoDataGroup)
 			time.sleep(1)
 			dp.update(0, 'Extracting zip files... Please wait...', '[COLOR magenta]Đang giải nén zip files... Vui lòng chờ...[/COLOR]')
 			addonfolder = xbmc.translatePath('special://home')
@@ -797,12 +835,17 @@ def playlistTester(url):
 			pass
 
 def addDir(name, url, mode, iconimage, isFolder = False):
-	#xbmc.log("Printing iconimage: %s"%iconimage,xbmc.LOGNOTICE)
-	u = (sys.argv[0] + "?url=" + urllib.parse.quote_plus(url) + "&mode=" + str(mode) +\
-		 "&name=" + urllib.parse.quote_plus(name) + "&iconimage=" + urllib.parse.quote_plus(iconimage))
-	ok = True
-	liz = xbmcgui.ListItem(name)
-	liz.setArt({ 'poster': iconimage })
+	if KodiVersion > 18:
+		u = (sys.argv[0] + "?url=" + urllib.parse.quote_plus(url) + "&mode=" + str(mode) +\
+			"&name=" + urllib.parse.quote_plus(name) + "&iconimage=" + urllib.parse.quote_plus(iconimage))
+		ok = True
+		liz = xbmcgui.ListItem(name)
+		liz.setArt({ 'poster': iconimage })
+	else:
+		u = (sys.argv[0] + "?url=" + urllib.quote_plus(url) + "&mode=" + str(mode) +\
+			"&name=" + urllib.quote_plus(name) + "&iconimage=" + urllib.quote_plus(iconimage))
+		ok = True
+		liz = xbmcgui.ListItem(name, iconImage = "DefaultFolder.png", thumbnailImage = iconimage)
 	liz.setInfo( type = "Video", infoLabels = { "Title": name } )
 	if iconimage == fanart:
 		liz.setProperty('fanart_image', fanart)
@@ -858,14 +901,24 @@ name = None
 mode = None
 iconimage = None
 
-try: url = urllib.parse.unquote(params["url"])
-except: pass
-try: name = urllib.parse.unquote(params["name"])
-except: pass
-try: mode = int(params["mode"])
-except: pass
-try: iconimage = urllib.parse.unquote(params["iconimage"])
-except: pass
+if KodiVersion > 18:
+	try: url = urllib.parse.unquote(params["url"])
+	except: pass
+	try: name = urllib.parse.unquote(params["name"])
+	except: pass
+	try: mode = int(params["mode"])
+	except: pass
+	try: iconimage = urllib.parse.unquote(params["iconimage"])
+	except: pass
+else:
+	try: url = urllib.unquote_plus(params["url"])
+	except: pass
+	try: name = urllib.unquote_plus(params["name"])
+	except: pass
+	try: mode = int(params["mode"])
+	except: pass
+	try: iconimage = urllib.unquote_plus(params["iconimage"])
+	except: pass
 
 xbmc.log("==================== AznMedia ====================",xbmc.LOGNOTICE)
 xbmc.log("NAME: %s"%name,xbmc.LOGNOTICE)
