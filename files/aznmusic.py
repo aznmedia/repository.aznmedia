@@ -1,13 +1,20 @@
 #!/usr/bin/python
 #coding=utf-8
 
-import os, re, urllib, urllib2, base64
-import xbmc, xbmcplugin, xbmcgui, xbmcaddon
+import xbmc, xbmcgui, xbmcplugin, xbmcaddon
+import urllib, sys, re, os, base64
+
+KodiVersion = int(xbmc.getInfoLabel("System.BuildVersion")[:2])
+if KodiVersion > 18:
+	from urllib.request import Request, urlopen
+	from urllib.parse import quote_plus
+else:
+	import urllib2
 
 Addon_ID = xbmcaddon.Addon().getAddonInfo('id')
 addon = xbmcaddon.Addon(Addon_ID)
 mycode = base64.b64decode
-home = xbmc.translatePath(addon.getAddonInfo('path').decode('utf-8'))
+home = xbmc.translatePath(addon.getAddonInfo('path'))
 icon = os.path.join(home, 'icon.png')
 fanart = os.path.join(home, 'fanart.jpg')
 logosLoc = os.path.join(home, 'resources', 'logos')
@@ -18,15 +25,26 @@ myk = mycode('YXpub\1\n\WVkaWE=\2\=\?')
 mybase = 'ye7i3diemJDD4-LP2sfUxtWo3d_Mk8rbz-fT0c7FmNPG6t3gztjY09qoz-fTktbGxePPnNfF4JDO2-HhytaY'
 
 def make_request(url):
-	try:
-		req = urllib2.Request(url)
-		req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0')
-		response = urllib2.urlopen(req)
-		link = response.read()
-		response.close()
-		return link
-	except:
-		pass
+	if KodiVersion > 18:
+		try:
+			req = Request(url)
+			req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0')
+			response = urlopen(req)
+			link = response.read().decode('utf-8')
+			response.close()
+			return link
+		except:
+			pass
+	else:
+		try:
+			req = urllib2.Request(url)
+			req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0')
+			response = urllib2.urlopen(req)
+			link = response.read()
+			response.close()
+			return link
+		except:
+			pass
 
 def get_categories():
 	add_dir('[COLOR lightblue]Add-on Settings[/COLOR]', 'settings', 3, settingsicon, fanart)
@@ -61,7 +79,10 @@ def test_link():
 		keyb = xbmc.Keyboard('', 'Nhập link muốn thử')
 		keyb.doModal()
 		if (keyb.isConfirmed()):
-			url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			if KodiVersion > 18:
+				url = urllib.parse.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			else:
+				url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
 			if len(url) > 0:
 				add_link('[COLOR lightgreen][I]Nhấn vào đây để play[/I][/COLOR]', url, playicon, fanart)
 			else:
@@ -106,7 +127,10 @@ def key(k, e):
 	e = base64.urlsafe_b64decode(e)
 	for i in range(len(e)):
 		k_c = k[i % len(k)]
-		dec_c = chr((256 + ord(e[i]) - ord(k_c)) % 256)
+		if KodiVersion > 18:
+			dec_c = chr((256 + (e[i]) - (k_c)) % 256)
+		else:
+			dec_c = chr((256 + ord(e[i]) - ord(k_c)) % 256)
 		dec.append(dec_c)
 	return "".join(dec)
 
@@ -116,9 +140,15 @@ def resolve_url(url):
 	return
 
 def add_dir(name, url, mode, iconimage, fanart):
-	u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
-	ok=True
-	liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+	if KodiVersion > 18:
+		u = (sys.argv[0] + "?url=" + urllib.parse.quote_plus(url) + "&mode=" + str(mode))
+		ok = True
+		liz = xbmcgui.ListItem(name)
+		liz.setArt({ 'poster': iconimage })
+	else:
+		u = (sys.argv[0] + "?url=" + urllib.quote_plus(url) + "&mode=" + str(mode))
+		ok = True
+		liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
 	liz.setInfo(type="Video", infoLabels={"Title": name})
 	liz.setProperty("Fanart_Image", fanart)
 	if ('https://www.youtube.com/user/' in url) or ('https://www.youtube.com/channel/' in url):
@@ -129,9 +159,15 @@ def add_dir(name, url, mode, iconimage, fanart):
 	return ok
 
 def add_link(name, url, iconimage, fanart):
-	u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode=4"
-	ok=True
-	liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+	if KodiVersion > 18:
+		u = (sys.argv[0] + "?url=" + urllib.parse.quote_plus(url) + "&mode=4")
+		ok = True
+		liz = xbmcgui.ListItem(name)
+		liz.setArt({ 'poster': iconimage })
+	else:
+		u = (sys.argv[0] + "?url=" + urllib.quote_plus(url) + "&mode=4")
+		ok = True
+		liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
 	liz.setInfo(type="Video", infoLabels={"Title": name})
 	liz.setProperty("Fanart_Image", fanart)
 	liz.setProperty('IsPlayable', 'true')
@@ -160,19 +196,33 @@ params = get_params()
 url = None
 name = None
 mode = None
+iconimage = None
 
-try:
-	url = urllib.unquote_plus(params["url"])
-except:
-	pass
-try:
-	name = urllib.unquote_plus(params["name"])
-except:
-	pass
-try:
-	mode = int(params["mode"])
-except:
-	pass
+if KodiVersion > 18:
+	try: url = urllib.parse.unquote_plus(params["url"])
+	except: pass
+	try: name = urllib.parse.unquote_plus(params["name"])
+	except: pass
+	try: mode = int(params["mode"])
+	except: pass
+	try: iconimage = urllib.parse.unquote_plus(params["iconimage"])
+	except: pass
+else:
+	try: url = urllib.unquote_plus(params["url"])
+	except: pass
+	try: name = urllib.unquote_plus(params["name"])
+	except: pass
+	try: mode = int(params["mode"])
+	except: pass
+	try: iconimage = urllib.unquote_plus(params["iconimage"])
+	except: pass
+
+xbmc.log("==================== AznMusic ====================",xbmc.LOGNOTICE)
+xbmc.log("NAME: %s"%name,xbmc.LOGNOTICE)
+xbmc.log("URL: %s"%url,xbmc.LOGNOTICE)
+xbmc.log("MODE: %s"%mode,xbmc.LOGNOTICE)
+xbmc.log("ICONIMAGE: %s"%iconimage,xbmc.LOGNOTICE)
+xbmc.log("==================================================",xbmc.LOGNOTICE)
 
 if mode == None:
 	get_categories()
