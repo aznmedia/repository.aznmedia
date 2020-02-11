@@ -3,9 +3,15 @@
 
 from sqlite3 import dbapi2 as db_lib
 import xbmc, xbmcgui, xbmcplugin, xbmcaddon
-import urllib, urllib2, sys, re, os, shutil, base64, time, zipfile
+import urllib, sys, re, os, shutil, base64, time, zipfile
 
 KodiVersion = int(xbmc.getInfoLabel("System.BuildVersion")[:2])
+if KodiVersion > 18: # python 3.x
+	from urllib.request import Request, urlopen
+	from urllib.parse import quote_plus
+else: # python 2.x
+	import urllib2
+
 plugin_handle = int(sys.argv[1])
 
 Addon_ID = xbmcaddon.Addon().getAddonInfo('id')
@@ -13,8 +19,8 @@ mysettings = xbmcaddon.Addon(Addon_ID)
 Addon_Name = mysettings.getAddonInfo('name')
 Addon_Version = mysettings.getAddonInfo('version')
 Addon_Author = mysettings.getAddonInfo('author')
-profile = xbmc.translatePath(mysettings.getAddonInfo('profile').decode('utf-8'))
-home = xbmc.translatePath(mysettings.getAddonInfo('path').decode('utf-8'))
+profile = xbmc.translatePath(mysettings.getAddonInfo('profile'))
+home = xbmc.translatePath(mysettings.getAddonInfo('path'))
 icon = os.path.join(home, 'icon.png')
 fanart = os.path.join(home, 'fanart.jpg')
 LocalizedString = mysettings.getLocalizedString
@@ -40,10 +46,16 @@ myDict = {';':'', '&amp;':'&', '&quot;':'"', '.':' ', '&#39;':'\'', '&#038;':'&'
 
 def make_request(url):
 	try:
-		req = urllib2.Request(url)
-		req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0')
-		response = urllib2.urlopen(req)
-		link = response.read()
+		if KodiVersion > 18: # python 3.x
+			req = Request(url)
+			req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0')
+			response = urlopen(req)
+			link = response.read().decode('utf-8')
+		else: # python 2.x
+			req = urllib2.Request(url)
+			req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0')
+			response = urllib2.urlopen(req)
+			link = response.read()
 		response.close()
 		return link
 	except:
@@ -51,8 +63,11 @@ def make_request(url):
 
 def read_file(file):
 	try:
-		f = open(file, 'r')
-		content = f.read()
+		f = open(file, 'rb')
+		if KodiVersion > 18: # python 3.x
+			content = f.read().decode('utf-8')
+		else: # python 2.x
+			content = f.read()
 		f.close()
 		return content
 	except:
@@ -130,7 +145,10 @@ def key(k, e):
 	e = base64.urlsafe_b64decode(e)
 	for i in range(len(e)):
 		k_c = k[i % len(k)]
-		dec_c = chr((256 + ord(e[i]) - ord(k_c)) % 256)
+		if KodiVersion > 18: # python 3.x
+			dec_c = chr((256 + (e[i]) - (k_c)) % 256)
+		else: # python 2.x
+			dec_c = chr((256 + ord(e[i]) - ord(k_c)) % 256)
 		dec.append(dec_c)
 	return "".join(dec)
 
@@ -187,9 +205,9 @@ def run_exodus():
 	xbmc.executebuiltin("RunAddon(plugin.video.exodus)")
 
 def main():
-	#addDir('[COLOR lightblue][B]Viet Hai Ngoai 2[/B][/COLOR]', 'plugin://plugin.tivi9999.viettv24', 999, 'https://bitbucket.org/aznmedia/repository.azn.media/raw/master/playlists/viplist/icons/viettv24_2.png', True)
 	content = make_request(mainmenu)
 	#content = read_file(os.path.expanduser(r'~\Desktop\mainmenu.xml'))
+	#xbmc.log("Printing content: %s"%content,xbmc.LOGNOTICE)
 	match = re.compile(xml_regex+'\s*<mode>(.*?)</mode>').findall(content)
 	for name, url, thumb, mode in match:
 		if mode == '1' or mode == '3':
@@ -277,6 +295,8 @@ def del_packages():  #### plugin.video.xbmchubmaintenance ####
 					for d in dirs:
 						shutil.rmtree(os.path.join(root, d))
 					dialog.ok('Delete Package Cache Files', 'Done', "", '[COLOR magenta]Đã làm xong[/COLOR]')
+				else:
+					sys.exit(0)
 			else:
 				dialog.ok('Delete Package Cache Files', 'No zip file found.', "", '[COLOR magenta]Không tìm thấy zip file.[/COLOR]')
 	except:
@@ -389,52 +409,45 @@ def install_repos(headTitle):
 	except:
 		pass
 	try:
-		if KodiVersion > 17:
+		if KodiVersion > 18: # python 3.x
+			#ReposLoc = os.path.expanduser(r'~\Desktop\allinone19.zip')
+			#ReposDataLoc = os.path.expanduser(r'~\Desktop\allinoneuserdata19.zip')
+			ReposLoc = mainloc + 'allinone19.zip'
+			ReposDataLoc = mainloc + 'allinoneuserdata19.zip'
+		elif KodiVersion == 18: # python 2.x
 			#ReposLoc = os.path.expanduser(r'~\Desktop\allinone18.zip')
-			ReposLoc = mainloc + 'allinone18.zip'
-			RepoZip = os.path.basename(ReposLoc)
-			repoGroup = os.path.join(packagesLoc, RepoZip)
 			#ReposDataLoc = os.path.expanduser(r'~\Desktop\allinoneuserdata18.zip')
+			ReposLoc = mainloc + 'allinone18.zip'
 			ReposDataLoc = mainloc + 'allinoneuserdata18.zip'
-			RepoDataZip = os.path.basename(ReposDataLoc)
-			repoDataGroup = os.path.join(packagesLoc, RepoDataZip)
-			dp = xbmcgui.DialogProgress()
-			dp.create(headTitle, 'Downloading big zip file... Please wait...', '[COLOR magenta]Đang tải zip file dung lượng lớn... Vui lòng chờ...[/COLOR]')
-			#shutil.copy(ReposLoc, repoGroup)
-			urllib.urlretrieve(ReposLoc, repoGroup)
-			#shutil.copy(ReposDataLoc, repoDataGroup)
-			urllib.urlretrieve(ReposDataLoc, repoDataGroup)
-			time.sleep(1)
-			dp.update(0, 'Extracting zip files... Please wait...', '[COLOR magenta]Đang giải nén zip files... Vui lòng chờ...[/COLOR]')
-			addonfolder = xbmc.translatePath('special://home')
-			extract_all(repoGroup, addonfolder, dp)
-			time.sleep(1)
-			extract_all(repoDataGroup, addonfolder, dp)
-			time.sleep(1)
-			update_repo()
-		else:
+		elif KodiVersion < 18: # python 2.x
 			#ReposLoc = os.path.expanduser(r'~\Desktop\allinone.zip')
-			ReposLoc = mainloc + 'allinone.zip'
-			RepoZip = os.path.basename(ReposLoc)
-			repoGroup = os.path.join(packagesLoc, RepoZip)
 			#ReposDataLoc = os.path.expanduser(r'~\Desktop\allinoneuserdata.zip')
+			ReposLoc = mainloc + 'allinone.zip'
 			ReposDataLoc = mainloc + 'allinoneuserdata.zip'
-			RepoDataZip = os.path.basename(ReposDataLoc)
-			repoDataGroup = os.path.join(packagesLoc, RepoDataZip)
-			dp = xbmcgui.DialogProgress()
-			dp.create(headTitle, 'Downloading big zip file... Please wait...', '[COLOR magenta]Đang tải zip file dung lượng lớn... Vui lòng chờ...[/COLOR]')
+		RepoZip = os.path.basename(ReposLoc)
+		repoGroup = os.path.join(packagesLoc, RepoZip)
+		RepoDataZip = os.path.basename(ReposDataLoc)
+		repoDataGroup = os.path.join(packagesLoc, RepoDataZip)
+		dp = xbmcgui.DialogProgress()
+		dp.create(headTitle, 'Downloading big zip file... Please wait...', '[COLOR magenta]Đang tải zip file dung lượng lớn... Vui lòng chờ...[/COLOR]')
+		if KodiVersion > 18: # python 3.x
+			urllib.request.urlretrieve(ReposLoc, repoGroup)
+			urllib.request.urlretrieve(ReposDataLoc, repoDataGroup)
 			#shutil.copy(ReposLoc, repoGroup)
-			urllib.urlretrieve(ReposLoc, repoGroup)
 			#shutil.copy(ReposDataLoc, repoDataGroup)
+		else: # python 2.x
+			urllib.urlretrieve(ReposLoc, repoGroup)
 			urllib.urlretrieve(ReposDataLoc, repoDataGroup)
-			time.sleep(1)
-			dp.update(0, 'Extracting zip files... Please wait...', '[COLOR magenta]Đang giải nén zip files... Vui lòng chờ...[/COLOR]')
-			addonfolder = xbmc.translatePath('special://home')
-			extract_all(repoGroup, addonfolder, dp)
-			time.sleep(1)
-			extract_all(repoDataGroup, addonfolder, dp)
-			time.sleep(1)
-			update_repo()
+			#shutil.copy(ReposLoc, repoGroup)
+			#shutil.copy(ReposDataLoc, repoDataGroup)
+		time.sleep(1)
+		dp.update(0, 'Extracting zip files... Please wait...', '[COLOR magenta]Đang giải nén zip files... Vui lòng chờ...[/COLOR]')
+		addonfolder = xbmc.translatePath('special://home')
+		extract_all(repoGroup, addonfolder, dp)
+		time.sleep(1)
+		extract_all(repoDataGroup, addonfolder, dp)
+		time.sleep(1)
+		update_repo()
 	except:
 		pass
 	if os.path.isfile(repoGroup) == True:
@@ -499,7 +512,7 @@ def play_other_video(url):
 	xbmc.sleep(1000)
 	xbmc.Player().play(url, item, False, -1)
 
-def play_video(url):
+def play_video(url): ##### PlayMedia (favorite) --> mode = 1 [use def play_video(url)]
 	if url.startswith('idn'):
 		url = 'http://www.giniko.com/watch.php?id=%s' % url.split('=')[-1]
 		url = re.compile('file: "(.+?)"').findall(make_request(url))[0]
@@ -515,20 +528,31 @@ def play_video(url):
 			pass
 	return
 
+def play_favorite_ActivateWindow(url): ##### ActivateWindow (favorite) --> mode = 300  [use def play_favorite_ActivateWindow(url)]    ##### PlayMedia (favorite) --> mode = 1 [use above def play_video(url)]
+	xbmc.executebuiltin("ActivateWindow(10025,%s)"%url)
 def channelTester():
 	try:
 		keyb = xbmc.Keyboard('', 'Enter Channel Name [COLOR lime]- Nhập Tên Kênh (Dùng Tiếng Việt Không Dấu)[/COLOR]')
 		keyb.doModal()
 		if (keyb.isConfirmed()):
-			name = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			if KodiVersion > 18: # python 3.x
+				name = urllib.parse.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			else: # python 2.x
+				name = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
 		keyb = xbmc.Keyboard('', 'Enter Channel URL [COLOR lime]- Nhập URL[/COLOR]')
 		keyb.doModal()
 		if (keyb.isConfirmed()):
-			url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			if KodiVersion > 18: # python 3.x
+				url = urllib.parse.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			else: # python 2.x
+				url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
 		keyb = xbmc.Keyboard('', 'Enter Logo URL [COLOR lime]- Nhập Logo URL (Không Bắt Buộc)[/COLOR]')
 		keyb.doModal()
 		if (keyb.isConfirmed()):
-			thumb = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			if KodiVersion > 18: # python 3.x
+				thumb = urllib.parse.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			else: # python 2.x
+				thumb = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
 		if len(name) > 0 and len(url) > 0:
 			if len(thumb) < 1:
 				thumb = icon
@@ -544,7 +568,10 @@ def GoogleDrive_VNOP():
 		keyb = xbmc.Keyboard('', 'Enter Google Drive Link')
 		keyb.doModal()
 		if (keyb.isConfirmed()):
-			url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			if KodiVersion > 18: # python 3.x
+				url = urllib.parse.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			else: # python 2.x
+				url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
 			if 'https://drive.google.com/file/d/' in url:
 				url = url.replace('https://drive.google.com/file/d/','plugin://plugin.video.thongld.vnplaylist/play/https%3A%2F%2Fdrive.google.com%2Ffile%2Fd%2F') + '/View'
 			elif 'https://drive.google.com/open?id=' in url:
@@ -562,7 +589,10 @@ def Fshare_VNOP():
 		keyb = xbmc.Keyboard('', 'Enter Fshare Link')
 		keyb.doModal()
 		if (keyb.isConfirmed()):
-			url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			if KodiVersion > 18: # python 3.x
+				url = urllib.parse.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			else: # python 2.x
+				url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
 			if 'file' in url: 
 				url = (url.replace('https://www.fshare.vn/file/','plugin://plugin.video.thongld.vnplaylist/play/https%3A%2F%2Fwww.fshare.vn%2Ffile%2F'))+'/FshareFile'
 			elif 'folder' in url:
@@ -581,7 +611,10 @@ def GoogleDrive_VMF():
 		keyb = xbmc.Keyboard('', 'Enter Google Drive Link')
 		keyb.doModal()
 		if (keyb.isConfirmed()):
-			url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			if KodiVersion > 18: # python 3.x
+				url = urllib.parse.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			else: # python 2.x
+				url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
 			if 'https://drive.google.com/file/d/' in url:
 				url = 'plugin://plugin.video.vietmediaF?action=play&url=' + url
 			elif 'https://drive.google.com/open?id=' in url:
@@ -599,7 +632,10 @@ def Fshare_VMF():
 		keyb = xbmc.Keyboard('', 'Enter Fshare Link')
 		keyb.doModal()
 		if (keyb.isConfirmed()):
-			url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			if KodiVersion > 18: # python 3.x
+				url = urllib.parse.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			else: # python 2.x
+				url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
 			if 'file' in url: 
 				url = ('plugin://plugin.video.vietmediaF?action=play_direct_link_play&url=') + url
 			elif 'folder' in url:
@@ -612,13 +648,16 @@ def Fshare_VMF():
 				addDir('Fshare Folder', url, 555, thumb, True)
 	except:
 		pass
-		
+
 def Fshare_Xshare():
 	try:
 		keyb = xbmc.Keyboard('', 'Enter Fshare Link')
 		keyb.doModal()
 		if (keyb.isConfirmed()):
-			url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			if KodiVersion > 18: # python 3.x
+				url = urllib.parse.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			else: # python 2.x
+				url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
 			if 'file' in url: 
 				url = ('plugin://plugin.video.xshare/?mode=3&page=0&url=') + url
 			elif 'folder' in url:
@@ -636,21 +675,23 @@ def play_localav():
 	local_av = mysettings.getSetting('local_av')
 	if len(local_av) < 1:
 		mysettings.openSettings()
+		sys.exit(0)
 	else:
 		if os.path.exists(local_av) == True:
 			name = local_av.split("\\")[-1].split("/")[-1]
-			thumb = ico('localvideo')
+			thumb = icon
 			url = local_av
 			addDir(name, url, 1,thumb, False)
 		else:
-			dialog.ok('Enter Logo URL [COLOR lime]- Nhập Logo URL (Không Bắt Buộc)[/COLOR]', 'Video file does not exist. Please choose another video to play.', '[COLOR magenta]Không có video này. Vui lòng chọn xem video khác.[/COLOR]')
 			with open(xmlfile, 'r') as f:
 				lines = f.readlines()
 			with open(xmlfile, 'w') as f:
 				for line in lines:
 					if not 'id="local_av"' in line:
 						f.write(line)
-			re_fresh()
+				dialog.ok('Warning - Cảnh Báo', '[COLOR red]%s[/COLOR]' % local_av, 'File no longer exists. Please choose another video/audio.', '[COLOR magenta]File không còn tồn tại. Vui lòng chọn video/audio khác.[/COLOR]')
+				sys.exit(0)
+			mysettings.openSettings()
 
 def XML_Tester():
 	clearcache()
@@ -687,7 +728,18 @@ def playlistTester(url):
 			mysettings.openSettings()
 			sys.exit(0)
 		else:
-			content = read_file(local_path)
+			if os.path.isfile(local_path):
+				content = read_file(local_path)
+			else:
+				with open(xmlfile, 'r') as f:
+					lines = f.readlines()
+				with open(xmlfile, 'w') as f:
+					for line in lines:
+						if not 'id="local_path"' in line:
+							f.write(line)
+					dialog.ok('Warning - Cảnh Báo', '[COLOR red]%s[/COLOR]' % local_path, 'File no longer exists. Please choose another m3u playlist.', '[COLOR magenta]File không còn tồn tại. Vui lòng chọn danh sách m3u khác.[/COLOR]')
+					sys.exit(0)
+				mysettings.openSettings()
 	else:
 		if len(online_link) < 1:
 			mysettings.openSettings()
@@ -700,6 +752,32 @@ def playlistTester(url):
 			m3u_playlist(name, url, thumb)
 		except:
 			pass
+
+def addDir(name, url, mode, iconimage, isFolder = False):
+	if KodiVersion > 18: # python 3.x
+		u = (sys.argv[0] + "?url=" + urllib.parse.quote_plus(url) + "&mode=" + str(mode) +\
+			"&name=" + urllib.parse.quote_plus(name) + "&iconimage=" + urllib.parse.quote_plus(iconimage))
+		ok = True
+		liz = xbmcgui.ListItem(name)
+		liz.setArt({ 'poster': iconimage })
+	else: # python 2.x
+		u = (sys.argv[0] + "?url=" + urllib.quote_plus(url) + "&mode=" + str(mode) +\
+			"&name=" + urllib.quote_plus(name) + "&iconimage=" + urllib.quote_plus(iconimage))
+		ok = True
+		liz = xbmcgui.ListItem(name, iconImage = "DefaultFolder.png", thumbnailImage = iconimage)
+	liz.setInfo( type = "Video", infoLabels = { "Title": name } )
+	if iconimage == fanart:
+		liz.setProperty('fanart_image', fanart)
+	else:
+		liz.setProperty('fanart_image', iconimage)
+	if not isFolder:
+		liz.setProperty('IsPlayable', 'true')
+	elif any(x in url for x in ['plugin://plugin', 'script://script']):
+		u = url
+	elif any(x in url for x in ['www.youtube.com/user/', 'www.youtube.com/channel/', 'www.youtube.com/playlist/']):
+		u = 'plugin://plugin.video.youtube/%s/%s/' % (url.split( '/' )[-2], url.split( '/' )[-1])
+	ok = xbmcplugin.addDirectoryItem(plugin_handle, url = u, listitem = liz, isFolder = isFolder)
+	return ok
 
 def get_params():
 	param = []
@@ -717,25 +795,6 @@ def get_params():
 			if (len(splitparams)) == 2:
 				param[splitparams[0]] = splitparams[1]
 	return param
-
-def addDir(name, url, mode, iconimage, isFolder = False):
-	u = (sys.argv[0] + "?url=" + urllib.quote_plus(url) + "&mode=" + str(mode) +\
-		 "&name=" + urllib.quote_plus(name) + "&iconimage=" + urllib.quote_plus(iconimage))
-	ok = True
-	liz = xbmcgui.ListItem(name, iconImage = "DefaultFolder.png", thumbnailImage = iconimage)
-	liz.setInfo( type = "Video", infoLabels = { "Title": name } )
-	if iconimage == fanart:
-		liz.setProperty('fanart_image', fanart)
-	else:
-		liz.setProperty('fanart_image', iconimage)
-	if not isFolder:
-		liz.setProperty('IsPlayable', 'true')
-	elif any(x in url for x in ['plugin://plugin', 'script://script']):
-		u = url
-	elif any(x in url for x in ['www.youtube.com/user/', 'www.youtube.com/channel/', 'www.youtube.com/playlist/']):
-		u = 'plugin://plugin.video.youtube/%s/%s/' % (url.split( '/' )[-2], url.split( '/' )[-1])
-	ok = xbmcplugin.addDirectoryItem(plugin_handle, url = u, listitem = liz, isFolder = isFolder)
-	return ok
 
 mykbase = mycode('eWU3aTNkaWVtSkRENC1MUDJzZlV4dFdvM2Rf\2\n\TWs4cmJ6LWZUMGM3Rm1O\
                   UEc2dDNnenRqWTA5cW96LWZUa3RiR3hlUFBuTmZGNEpETzItSGh5dGFZ\?\=\4')
@@ -756,15 +815,31 @@ url = None
 name = None
 mode = None
 iconimage = None
+if KodiVersion > 18: # python 3.x
+	try: url = urllib.parse.unquote_plus(params["url"])
+	except: pass
+	try: name = urllib.parse.unquote_plus(params["name"])
+	except: pass
+	try: mode = int(params["mode"])
+	except: pass
+	try: iconimage = urllib.parse.unquote_plus(params["iconimage"])
+	except: pass
+else: # python 2.x
+	try: url = urllib.unquote_plus(params["url"])
+	except: pass
+	try: name = urllib.unquote_plus(params["name"])
+	except: pass
+	try: mode = int(params["mode"])
+	except: pass
+	try: iconimage = urllib.unquote_plus(params["iconimage"])
+	except: pass
 
-try: url = urllib.unquote_plus(params["url"])
-except: pass
-try: name = urllib.unquote_plus(params["name"])
-except: pass
-try: mode = int(params["mode"])
-except: pass
-try: iconimage = urllib.unquote_plus(params["iconimage"])
-except: pass
+xbmc.log("==================== AznMediaFamily ====================",xbmc.LOGNOTICE)
+xbmc.log("NAME: %s"%name,xbmc.LOGNOTICE)
+xbmc.log("URL: %s"%url,xbmc.LOGNOTICE)
+xbmc.log("MODE: %s"%mode,xbmc.LOGNOTICE)
+xbmc.log("ICONIMAGE: %s"%iconimage,xbmc.LOGNOTICE)
+xbmc.log("==================================================",xbmc.LOGNOTICE)
 
 if mode == None or url == None or len(url) < 1:
 	easyinstaller = os.path.join(datafiles, 'EasyInstaller.txt')
@@ -798,6 +873,7 @@ if mode == None or url == None or len(url) < 1:
 			except:
 				dialog.ok('Easy Installer','[COLOR magenta][B]Có lỗi xảy ra. Vui lòng thử lại sau.[/B][/COLOR]')
 		else:
+			shutil.rmtree(datafiles)
 			sys.exit(0)
 	else:
 		main()
@@ -896,5 +972,6 @@ elif mode == 210:
 
 elif mode == 220:
 	run_exodus()
-
+elif mode == 300:
+	play_favorite_ActivateWindow(url)
 xbmcplugin.endOfDirectory(plugin_handle)

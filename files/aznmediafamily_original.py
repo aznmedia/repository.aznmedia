@@ -201,6 +201,11 @@ def main():
 	addDir('[COLOR green][B]Add-on Settings[/B][/COLOR]', 'NoURL', 2, ico('settings'), True)
 
 def add_AVSource():
+	addDir('[COLOR blue][B]Play Fshare Link Using VNOP Addon[/B][/COLOR]', 'Fshare', 45, ico('fsharevip'), True)
+	addDir('[COLOR violet][B]Play Fshare Link Using VMF Addon[/B][/COLOR]', 'Fshare', 46, ico('fsharevip'), True)
+	addDir('[COLOR lightgreen][B]Play Fshare Link Using Xshare Addon[/B][/COLOR]', 'Fshare', 47, ico('fsharevip'), True)
+	addDir('[COLOR red][B]Play Google Drive Link Using VNOP Addon[/B][/COLOR]', 'VNOPGoogleDrive', 48, ico('GoogleDrive'), True)
+	addDir('[COLOR magenta][B]Play Google Drive Link Using VMF Addon[/B][/COLOR]', 'VMFGoogleDrive', 49, ico('GoogleDrive'), True)
 	addDir('[COLOR lime][B]Online Link - Link Trên Mạng[/B][/COLOR]', 'Online_AV', 40, ico('onlineav'), True)
 	addDir('[COLOR yellow][B]Play Local Video/Audio File - Play Video/Audio Trong Máy[/B][/COLOR]', 'Local_AV', 42, ico('localav'), True)
 	addDir('[COLOR cyan][B]Local M3U Playlist - M3U Playlist Trong Máy[/B][/COLOR]', 'localplaylist', 41, ico('local'), True)
@@ -231,7 +236,7 @@ def clear_cache():  #### plugin.video.xbmchubmaintenance ####
 						clearcache()
 						dialog.ok('Delete Kodi Cache Files', 'Done', "", '[COLOR magenta]Đã làm xong[/COLOR]')
 				else:
-					dialog.ok('Delete Kodi Cache Files', 'Cache has been cleared.')
+					sys.exit(0)
 	except:
 		pass
 	sys.exit(0)
@@ -282,17 +287,19 @@ def del_thumbnails():  #### script.rawmaintenance ####
 	thumbnailPath = xbmc.translatePath('special://thumbnails')
 	try:
 		if os.path.exists(thumbnailPath)==True:  
-				if dialog.yesno('Delete Thumbnails', 'This option deletes all thumbnails.', 'Are you sure you want to do this?', '[COLOR magenta]Bạn có muốn xoá tất cả các thumbnails không?[/COLOR]'):
-					for root, dirs, files in os.walk(thumbnailPath):
-						file_count = 0
-						file_count += len(files)
-						if file_count > 0:
-							for f in files:
-								try:
-									os.unlink(os.path.join(root, f))
-								except:
-									pass
-					dialog.ok('Delete Thumbnails', 'Please manually restart Kodi to rebuild thumbnail library.', '[COLOR magenta]Vui lòng tự khởi động lại Kodi để tái tạo lại thư viện thumbnail.[/COLOR]')
+			if dialog.yesno('Delete Thumbnails', 'This option deletes all thumbnails.', 'Are you sure you want to do this?', '[COLOR magenta]Bạn có muốn xoá tất cả các thumbnails không?[/COLOR]'):
+				for root, dirs, files in os.walk(thumbnailPath):
+					file_count = 0
+					file_count += len(files)
+					if file_count > 0:
+						for f in files:
+							try:
+								os.unlink(os.path.join(root, f))
+							except:
+								pass
+				dialog.ok('Delete Thumbnails', 'Please manually restart Kodi to rebuild thumbnail library.', '[COLOR magenta]Vui lòng tự khởi động lại Kodi để tái tạo lại thư viện thumbnail.[/COLOR]')
+			else:
+				sys.exit(0)
 	except:
 		pass
 	sys.exit(0)
@@ -303,7 +310,7 @@ def clear_LastPlayed():
 		if os.path.exists(historyFile)==True:
 			if dialog.yesno('Clear history cache of Last Played Add-on', 'Bạn có muốn xoá toàn bộ danh sách lưu trữ của Last Played Add-on không?'):
 				os.remove(historyFile)
-				dialog.ok('Clear history cache of Last Played Add-on', 'Done.', '[COLOR magenta]Xong.[/COLOR]')
+				dialog.ok('Clear history cache of Last Played Add-on', 'Done', "", '[COLOR magenta]Đã làm xong[/COLOR]')
 			else:
 				sys.exit(0)
 		else:
@@ -369,24 +376,71 @@ def update_repo():
 	xbmc.executebuiltin('XBMC.Container.Refresh')
 	xbmc.executebuiltin('XBMC.Container.Update')
 
-def install_repos(headTitle, ReposLoc):
+def install_repos(headTitle):
 	try:
-		RepoZip = os.path.basename(ReposLoc)
-		repoGroup = os.path.join(packagesLoc, RepoZip)
-		dp = xbmcgui.DialogProgress()
-		dp.create(headTitle, 'Downloading big zip file... Please wait...', '[COLOR magenta]Đang tải zip file dung lượng lớn... Vui lòng chờ...[/COLOR]')
-		#shutil.copy(ReposLoc, repoGroup)
-		urllib.urlretrieve(ReposLoc, repoGroup)
-		time.sleep(1)
-		dp.update(0, 'Extracting zip files... Please wait...', '[COLOR magenta]Đang giải nén zip files... Vui lòng chờ...[/COLOR]')
-		addonfolder = xbmc.translatePath('special://home')
-		extract_all(repoGroup, addonfolder, dp)
-		time.sleep(1)
-		update_repo()
+		for root, dirs, files in os.walk(packagesLoc):
+			file_count = 0
+			file_count += len(files)
+			if file_count > 0:
+				for f in files:
+					os.unlink(os.path.join(root, f))
+				for d in dirs:
+					shutil.rmtree(os.path.join(root, d))
+	except:
+		pass
+	try:
+		if KodiVersion > 17:
+			#ReposLoc = os.path.expanduser(r'~\Desktop\allinone18.zip')
+			ReposLoc = mainloc + 'allinone18.zip'
+			RepoZip = os.path.basename(ReposLoc)
+			repoGroup = os.path.join(packagesLoc, RepoZip)
+			#ReposDataLoc = os.path.expanduser(r'~\Desktop\allinoneuserdata18.zip')
+			ReposDataLoc = mainloc + 'allinoneuserdata18.zip'
+			RepoDataZip = os.path.basename(ReposDataLoc)
+			repoDataGroup = os.path.join(packagesLoc, RepoDataZip)
+			dp = xbmcgui.DialogProgress()
+			dp.create(headTitle, 'Downloading big zip file... Please wait...', '[COLOR magenta]Đang tải zip file dung lượng lớn... Vui lòng chờ...[/COLOR]')
+			#shutil.copy(ReposLoc, repoGroup)
+			urllib.urlretrieve(ReposLoc, repoGroup)
+			#shutil.copy(ReposDataLoc, repoDataGroup)
+			urllib.urlretrieve(ReposDataLoc, repoDataGroup)
+			time.sleep(1)
+			dp.update(0, 'Extracting zip files... Please wait...', '[COLOR magenta]Đang giải nén zip files... Vui lòng chờ...[/COLOR]')
+			addonfolder = xbmc.translatePath('special://home')
+			extract_all(repoGroup, addonfolder, dp)
+			time.sleep(1)
+			extract_all(repoDataGroup, addonfolder, dp)
+			time.sleep(1)
+			update_repo()
+		else:
+			#ReposLoc = os.path.expanduser(r'~\Desktop\allinone.zip')
+			ReposLoc = mainloc + 'allinone.zip'
+			RepoZip = os.path.basename(ReposLoc)
+			repoGroup = os.path.join(packagesLoc, RepoZip)
+			#ReposDataLoc = os.path.expanduser(r'~\Desktop\allinoneuserdata.zip')
+			ReposDataLoc = mainloc + 'allinoneuserdata.zip'
+			RepoDataZip = os.path.basename(ReposDataLoc)
+			repoDataGroup = os.path.join(packagesLoc, RepoDataZip)
+			dp = xbmcgui.DialogProgress()
+			dp.create(headTitle, 'Downloading big zip file... Please wait...', '[COLOR magenta]Đang tải zip file dung lượng lớn... Vui lòng chờ...[/COLOR]')
+			#shutil.copy(ReposLoc, repoGroup)
+			urllib.urlretrieve(ReposLoc, repoGroup)
+			#shutil.copy(ReposDataLoc, repoDataGroup)
+			urllib.urlretrieve(ReposDataLoc, repoDataGroup)
+			time.sleep(1)
+			dp.update(0, 'Extracting zip files... Please wait...', '[COLOR magenta]Đang giải nén zip files... Vui lòng chờ...[/COLOR]')
+			addonfolder = xbmc.translatePath('special://home')
+			extract_all(repoGroup, addonfolder, dp)
+			time.sleep(1)
+			extract_all(repoDataGroup, addonfolder, dp)
+			time.sleep(1)
+			update_repo()
 	except:
 		pass
 	if os.path.isfile(repoGroup) == True:
 		os.remove(repoGroup)
+	if os.path.isfile(repoDataGroup) == True:
+		os.remove(repoDataGroup)
 
 def tutorial_links(url):
 	content = make_request(url)
@@ -482,6 +536,99 @@ def channelTester():
 				addDir(name, url, 3, thumb, False)
 			else:
 				addDir(name, url, 1, thumb, False)
+	except:
+		pass
+
+def GoogleDrive_VNOP():
+	try:
+		keyb = xbmc.Keyboard('', 'Enter Google Drive Link')
+		keyb.doModal()
+		if (keyb.isConfirmed()):
+			url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			if 'https://drive.google.com/file/d/' in url:
+				url = url.replace('https://drive.google.com/file/d/','plugin://plugin.video.thongld.vnplaylist/play/https%3A%2F%2Fdrive.google.com%2Ffile%2Fd%2F') + '/View'
+			elif 'https://drive.google.com/open?id=' in url:
+				url = url.replace('https://drive.google.com/open?id=','plugin://plugin.video.thongld.vnplaylist/play/https%3A%2F%2Fdrive.google.com%2Ffile%2Fd%2F') + '/View'
+			elif 'https://drive.google.com' not in url:
+				url = ('plugin://plugin.video.thongld.vnplaylist/play/https%3A%2F%2Fdrive.google.com%2Ffile%2Fd%2F') + url + '/View'
+		if len(url) > 0:
+			thumb = 'https://bitbucket.org/aznmedia/repository.azn.media/raw/master/playlists/viplist/iconpath/GoogleDrive.png'
+			addDir('VNOP Google Drive Link', url, 1, thumb, False)
+	except:
+		pass
+
+def Fshare_VNOP():
+	try:
+		keyb = xbmc.Keyboard('', 'Enter Fshare Link')
+		keyb.doModal()
+		if (keyb.isConfirmed()):
+			url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			if 'file' in url: 
+				url = (url.replace('https://www.fshare.vn/file/','plugin://plugin.video.thongld.vnplaylist/play/https%3A%2F%2Fwww.fshare.vn%2Ffile%2F'))+'/FshareFile'
+			elif 'folder' in url:
+				url = (url.replace('https://www.fshare.vn/folder/','plugin://plugin.video.thongld.vnplaylist/fshare/https%3A%2F%2Fwww.fshare.vn%2Ffolder%2F'))+'/FshareFolder'
+		if len(url) > 0:
+			thumb = 'https://bitbucket.org/aznmedia/repository.azn.media/raw/master/playlists/viplist/fshare/icons/fsharevip.png'
+			if 'file' in url:
+				addDir('Fshare File', url, 1, thumb, False)
+			elif 'folder' in url:
+				addDir('Fshare Folder', url, 555, thumb, True)
+	except:
+		pass
+
+def GoogleDrive_VMF():
+	try:
+		keyb = xbmc.Keyboard('', 'Enter Google Drive Link')
+		keyb.doModal()
+		if (keyb.isConfirmed()):
+			url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			if 'https://drive.google.com/file/d/' in url:
+				url = 'plugin://plugin.video.vietmediaF?action=play&url=' + url
+			elif 'https://drive.google.com/open?id=' in url:
+				url = 'plugin://plugin.video.vietmediaF?action=play&url=' + url.replace('https://drive.google.com/open?id=','https://drive.google.com/file/d/') + '/View'
+			elif 'https://drive.google.com' not in url:
+				url = ('plugin://plugin.video.vietmediaF?action=play&url=https://drive.google.com/file/d/') + url + '/View'
+		if len(url) > 0:
+			thumb = 'https://bitbucket.org/aznmedia/repository.azn.media/raw/master/playlists/viplist/iconpath/GoogleDrive.png'
+			addDir('VMF Google Drive Link', url, 1, thumb, False)
+	except:
+		pass
+
+def Fshare_VMF():
+	try:
+		keyb = xbmc.Keyboard('', 'Enter Fshare Link')
+		keyb.doModal()
+		if (keyb.isConfirmed()):
+			url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			if 'file' in url: 
+				url = ('plugin://plugin.video.vietmediaF?action=play_direct_link_play&url=') + url
+			elif 'folder' in url:
+				url =('plugin://plugin.video.vietmediaF/?action=play&url=') + url
+		if len(url) > 0:
+			thumb = 'https://bitbucket.org/aznmedia/repository.azn.media/raw/master/playlists/viplist/fshare/icons/fsharevip.png'
+			if 'file' in url:
+				addDir('Fshare File', url, 1, thumb, False)
+			elif 'folder' in url:
+				addDir('Fshare Folder', url, 555, thumb, True)
+	except:
+		pass
+		
+def Fshare_Xshare():
+	try:
+		keyb = xbmc.Keyboard('', 'Enter Fshare Link')
+		keyb.doModal()
+		if (keyb.isConfirmed()):
+			url = urllib.quote_plus(keyb.getText(), safe="%/:=&?~#+!$,;'@()*[]").replace('+', ' ')
+			if 'file' in url: 
+				url = ('plugin://plugin.video.xshare/?mode=3&page=0&url=') + url
+			elif 'folder' in url:
+				url = ('plugin://plugin.video.xshare/?mode=90&page=0&url=') + url
+		if len(url) > 0:
+			thumb = 'https://bitbucket.org/aznmedia/repository.azn.media/raw/master/playlists/viplist/fshare/icons/fsharevip.png'
+			if 'file' in url:
+				addDir('Fshare File', url, 1, thumb, False)
+			elif 'folder' in url:
+				addDir('Fshare Folder', url, 555, thumb, True)
 	except:
 		pass
 
@@ -625,9 +772,7 @@ if mode == None or url == None or len(url) < 1:
 		d = dialog.yesno('Easy Installer', '- Nhấn Có (Yes) để cài tất cả các [COLOR magenta]repos và add-ons[/COLOR]')
 		if d:
 			try:
-				#ReposLoc = os.path.expanduser(r'~\Desktop\allinone.zip')
-				ReposLoc = mainloc + 'allinone.zip'
-				install_repos('Easy Installer', ReposLoc)
+				install_repos('Easy Installer')
 				os.remove(easyinstaller)
 				time.sleep(1)
 				setall_enable()
@@ -692,6 +837,21 @@ elif mode == 43:
 
 elif mode == 44:
 	XML_Tester()
+
+elif mode == 45:
+	Fshare_VNOP()
+
+elif mode == 46:
+	Fshare_VMF()
+
+elif mode == 47:
+	Fshare_Xshare()
+
+elif mode == 48:
+	GoogleDrive_VNOP()
+
+elif mode == 49:
+	GoogleDrive_VMF()
 
 elif mode == 50:
 	clear_cache()
